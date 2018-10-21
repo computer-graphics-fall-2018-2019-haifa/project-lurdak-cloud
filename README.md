@@ -1,11 +1,10 @@
 # Computer Graphics 203.3710, Winter 2018/2019
 ## Students Team data
 
-Name: 'Your real name'  
-Student Number: 'Your student number'
+Name: 'Rashed Mhajna'  
+Student Number: '300265337'
+Student Email : 'Lurdak@hotmail.com'
 
-Name: 'Your real name'  
-Student Number: 'Your student number'
 
 ### Lecturer
 *Roi Poranne*
