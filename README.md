@@ -1,7 +1,7 @@
 # Computer Graphics 203.3710, Winter 2018/2019
 ## Students Team data
 
-Name: 'Rashed Mhajna'  
+Name: 'Rashed Mahajna'  
 Student Number: '300265337'  
 Student Email : 'Lurdak@hotmail.com'
 
