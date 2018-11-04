@@ -71,7 +71,77 @@ void Renderer::SetViewport(int viewportWidth, int viewportHeight, int viewportX,
 	createBuffers(viewportWidth, viewportHeight);
 	createOpenGLBuffer();
 }
+void Renderer::plotLineLow(int x0, int y0,int x1,int y1, const glm::vec3& color)
+{
+	float deltax = x1 - x0;
+	float deltay = y1 - y0;
+	float yi = 0;
+	float slopError = 0;
+	int y = 0;
+	int x = 0;
+	if (deltay < 0) {
+		yi = -1;
+		deltay = -deltay;
+	}
+	slopError = 2 * deltay - deltax;
+	y = y0;
+	for (x = x0; x < x1; x++) {
+		putPixel(x, y, color);
+		/*if (slopError > 0) {
+			y += yi;
+			slopError -= 2 * deltay;
+		}
+		slopError += 2 * deltay;*/
+	}
+}
+void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& color)
+{
+	float deltax = x1 - x0;
+	float deltay = y1 - y0;
+	float xi = 1;
+	float slopError = 0;
+	int y = 0;
+	int x = 0;
+	if (deltax < 0) {
+		xi = -1;
+		deltax = -deltax;
+	}
+	slopError = 2 * deltax - deltay;
+	x = x0;
+	for (y = y0; y < y1; y++) {
+		putPixel(x, y, color);
+		if (slopError > 0) {
+			x += xi;
+			slopError -= 2 * deltax;
+		}
+		slopError += 2 * deltax;
+	}
+}
+void Renderer::DrawBrenLineAlg(int x0,int y0,int x1, int y1, const glm::vec3& color) {
+	float deltax = abs(x1- x0);
+	float deltay = abs(y1 - y0);
+	if (deltax > deltay) {
+		if (x0 > x1) {
+			plotLineLow(x1, y1, x0, y0,color);
+		}
+		else {
+			plotLineLow(x0, y0, x1, y1, color);	
+		}	
+	}
+	else {
+		if (y0 > y1) {
+			plotLineHight(x1, y1, x0, y0, color);
+			
+		}
+		else {
+			plotLineHight(x0, y0, x1, y1, color);
+			
+		}
+	}
+	
 
+
+}
 void Renderer::Render(const Scene& scene)
 {
 	//#############################################
@@ -80,7 +150,10 @@ void Renderer::Render(const Scene& scene)
 	//#############################################
 
 	// Draw a chess board in the middle of the screen
-	for (int i = 100; i < viewportWidth - 100; i++)
+	DrawBrenLineAlg(100,100, viewportWidth - 100, viewportWidth - 100, glm::vec3(0, 0,1));
+	DrawBrenLineAlg( 50, 50,100,100, glm::vec3(1, 0, 0));
+	DrawBrenLineAlg(100, 100, 500, 100, glm::vec3(0, 1, 0));
+	/*for (int i = 100; i < viewportWidth - 100; i++)
 	{
 		for (int j = 100; j < viewportHeight - 100; j++)
 		{
@@ -97,7 +170,7 @@ void Renderer::Render(const Scene& scene)
 				putPixel(i, j, glm::vec3(1, 0, 0));
 			}
 		}
-	}
+	}*/
 }
 
 //##############################
