@@ -75,7 +75,7 @@ void Renderer::plotLineLow(int x0, int y0,int x1,int y1, const glm::vec3& color)
 {
 	float deltax = x1 - x0;
 	float deltay = y1 - y0;
-	float yi = 0;
+	float yi = 1;
 	float slopError = 0;
 	int y = 0;
 	int x = 0;
@@ -87,11 +87,11 @@ void Renderer::plotLineLow(int x0, int y0,int x1,int y1, const glm::vec3& color)
 	y = y0;
 	for (x = x0; x < x1; x++) {
 		putPixel(x, y, color);
-		/*if (slopError > 0) {
+		if (slopError > 0) {
 			y += yi;
-			slopError -= 2 * deltay;
+			slopError -= 2 * deltax;
 		}
-		slopError += 2 * deltay;*/
+		slopError += 2 * deltay;
 	}
 }
 void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& color)
@@ -99,7 +99,7 @@ void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& co
 	float deltax = x1 - x0;
 	float deltay = y1 - y0;
 	float xi = 1;
-	float slopError = 0;
+	float slopError  ;
 	int y = 0;
 	int x = 0;
 	if (deltax < 0) {
@@ -112,7 +112,7 @@ void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& co
 		putPixel(x, y, color);
 		if (slopError > 0) {
 			x += xi;
-			slopError -= 2 * deltax;
+			slopError -= 2 * deltay;
 		}
 		slopError += 2 * deltax;
 	}
@@ -153,6 +153,9 @@ void Renderer::Render(const Scene& scene)
 	DrawBrenLineAlg(100,100, viewportWidth - 100, viewportWidth - 100, glm::vec3(0, 0,1));
 	DrawBrenLineAlg( 50, 50,100,100, glm::vec3(1, 0, 0));
 	DrawBrenLineAlg(100, 100, 500, 100, glm::vec3(0, 1, 0));
+	for (int i = 0; i < 10; i++) {
+		DrawBrenLineAlg(100+i,)
+	}
 	/*for (int i = 100; i < viewportWidth - 100; i++)
 	{
 		for (int j = 100; j < viewportHeight - 100; j++)
