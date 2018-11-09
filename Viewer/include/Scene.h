@@ -34,6 +34,7 @@ public:
 
 	void SetActiveModelIndex(int index);
 	const int GetActiveModelIndex() const;
+	const MeshModel Scene::GetModel(int index)const;
 
 	// Add more methods as needed...
 };
