@@ -150,8 +150,18 @@ void Renderer::Render(const Scene& scene)
 	//#############################################
 
 	// Draw a chess board in the middle of the screen
-	if (scene.GetModelCount() > 0) {
+	auto flag = true;
+	if (scene.GetModelCount() > 0 && flag) {
 		auto a = scene.GetModel(0);
+		for (auto &attack : a.GetFaces()) 
+		{
+			/*auto v0=a.GetVertices()[attack.GetVertexIndex(0)];
+			auto v1 = a.GetVertices()[attack.GetVertexIndex(1)];
+			auto v2 = a.GetVertices()[attack.GetVertexIndex(2)];
+			DrawBrenLineAlg()*/
+			
+			
+		}
 		
 	
 	}

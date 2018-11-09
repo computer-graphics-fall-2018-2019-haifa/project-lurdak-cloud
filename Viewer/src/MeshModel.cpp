@@ -42,3 +42,15 @@ const std::string& MeshModel::GetModelName()
 {
 	return modelName;
 }
+void MeshModel::SetModelName(const std::string name)
+{
+	this->modelName = name;
+} 
+const std::vector<glm::vec3> MeshModel::GetVertices()
+{
+	return this->vertices;
+}
+const std::vector<Face> MeshModel::GetFaces()
+{
+	return this->faces;
+}

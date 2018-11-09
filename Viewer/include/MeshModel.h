@@ -30,6 +30,10 @@ public:
 	void SetColor(const glm::vec4& color);
 
 	const std::string& GetModelName();
+	void SetModelName(const std::string name);
+	const std::vector<glm::vec3>  GetVertices();
+
+	const std::vector<Face>  GetFaces();
 
 	// Add more methods/functionality as needed...
 };
