@@ -7,6 +7,7 @@ Scene::Scene() :
 	activeModelIndex(0)
 {
 
+
 }
 
 void Scene::AddModel(const std::shared_ptr<MeshModel>& model)

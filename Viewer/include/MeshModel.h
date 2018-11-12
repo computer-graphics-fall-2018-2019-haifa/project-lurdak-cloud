@@ -16,10 +16,18 @@ private:
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec3> normals;
 	glm::mat4x4 worldTransform;
+	glm::mat4x4 worldRotate;
+ 
+	
 	glm::vec4 color;
 	std::string modelName;
-	glm::vec3 boxPoints[8];
+	std::vector<glm::vec3> boxPoints;
 	glm::vec3 center;
+	glm::mat4x4 modelRotate;
+	glm::mat4x4 modelTranslate;
+	glm::mat3x3 modelScale;
+
+
 
 public:
 	MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::string& modelName = "");
@@ -36,6 +44,10 @@ public:
 	const std::vector<glm::vec3>  GetVertices();
 
 	const std::vector<Face>  GetFaces();
+	const std::vector<glm::vec3> getBox();
+	const glm::vec3 getCenter();
+	void changeScale(const glm::vec3 scale);
+	const glm::mat3x3  getScale();
 
 	// Add more methods/functionality as needed...
 };

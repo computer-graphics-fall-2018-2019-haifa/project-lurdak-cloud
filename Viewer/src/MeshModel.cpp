@@ -11,9 +11,13 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	worldTransform(glm::mat4x4(1)),
 	vertices(vertices),
 	faces(faces),
-	normals(normals)
+	normals(normals),
+	modelScale(100, 0, 0
+			, 0, 100, 0
+			, 0, 0, 100)
 
 {
+
 	float maxX = vertices[0].x;
 	float maxY = vertices[0].y;
 	float maxZ = vertices[0].z;
@@ -22,23 +26,24 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	float minZ = vertices[0].z;
 	 
 	 
-	for (int i = 0; i < vertices.size(); i++) {
-		if (vertices[i].x > maxX) {
+	for (int i = 1; i < vertices.size(); i++) {
+		if (vertices[i].x  > maxX) {
 			maxX = vertices[i].x;
-		}
-		if (vertices[i].y > maxY) {
-			maxX = vertices[i].x;
-		}
-		if (vertices[i].y < minY) {
-			minY = vertices[i].y;
 		}
 		if (vertices[i].x < minX) {
 			minX = vertices[i].x;
 		}
-		if (vertices[i].z > maxZ) {
+		if (vertices[i].y  > maxY) {
+			maxY = vertices[i].y;
+		}
+		if (vertices[i].y  < minY) {
+			minY = vertices[i].y;
+		}
+		
+		if (vertices[i].z  > maxZ) {
 			maxZ = vertices[i].z;
 		}
-		if (vertices[i].z < minZ) {
+		if (vertices[i].z  < minZ) {
 			minZ = vertices[i].z;
 		}
 
@@ -46,14 +51,14 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	}
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
 
-	this->boxPoints[0]= glm::vec3(maxX , maxY, minZ);
-	this->boxPoints[1] = glm::vec3(maxX, minY, minZ);
-	this->boxPoints[2] = glm::vec3(minX, minY, minZ);
-	this->boxPoints[3] = glm::vec3(minX, maxY, minZ);
-	this->boxPoints[4] = glm::vec3(maxX, maxY, maxZ);
-	this->boxPoints[5] = glm::vec3(maxX, minY, maxZ);
-	this->boxPoints[6] = glm::vec3(minX, minY, maxZ);
-	this->boxPoints[7] = glm::vec3(minX, maxY, maxZ);
+	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
+	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
+	this->boxPoints.push_back(glm::vec3(minX, minY, minZ));
+	this->boxPoints.push_back(glm::vec3(minX, maxY, minZ));
+	this->boxPoints.push_back(glm::vec3(maxX, maxY, maxZ));
+	this->boxPoints.push_back(glm::vec3(maxX, minY, maxZ));
+	this->boxPoints.push_back(glm::vec3(minX, minY, maxZ));
+	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
 
 
 
@@ -78,7 +83,15 @@ void MeshModel::SetColor(const glm::vec4& color)
 {
 	this->color = color;
 }
+void MeshModel::changeScale(const glm::vec3 scale) {
+	this->modelScale = glm::mat3x3(scale.x, 0, 0
+		, 0, scale.y, 0
+		, 0, 0, scale.z);
 
+}
+const glm::mat3x3  MeshModel::getScale() {
+	return this->modelScale;
+}
 const glm::vec4& MeshModel::GetColor() const
 {
 	return color;
@@ -99,4 +112,10 @@ const std::vector<glm::vec3> MeshModel::GetVertices()
 const std::vector<Face> MeshModel::GetFaces()
 {
 	return this->faces;
+}
+const std::vector<glm::vec3> MeshModel::getBox() {
+	return  this->boxPoints;
+}
+const glm::vec3 MeshModel::getCenter() {
+	return  this->center;
 }

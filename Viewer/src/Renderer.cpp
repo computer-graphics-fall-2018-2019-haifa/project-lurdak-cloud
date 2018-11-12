@@ -8,7 +8,6 @@
 #include <cmath>
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
-#define SIZE 50;
 
 Renderer::Renderer(int viewportWidth, int viewportHeight, int viewportX, int viewportY) :
 	colorBuffer(nullptr),
@@ -144,12 +143,12 @@ void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& 
 
 }
 void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
-	int  x0 = v1.x*SIZE;
-	int y0 = v1.y*SIZE;
-	int x1 = v2.x*SIZE;
-	int y1 = v2.y*SIZE;
-	int x2 = v3.x*SIZE;
-	int y2 = v3.y*SIZE;
+	int  x0 = v1.x;
+	int y0 = v1.y;
+	int x1 = v2.x;
+	int y1 = v2.y;
+	int x2 = v3.x;
+	int y2 = v3.y;
 
 	DrawBrenLineAlg(x0, y0, x1, y1,color);
 	DrawBrenLineAlg(x1, y1, x2, y2, color);
@@ -157,6 +156,80 @@ void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::
 	 
 
 	
+}
+void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
+	for (int i = 0; i < 2; i++) {
+		DrawBrenLineAlg(box[i].x, box[i].y, box[i + 1].x, box[i + 1].y,color);
+	}
+	DrawBrenLineAlg(box[3].x, box[3].y, box[0].x, box[0].y,color);
+	for (int i = 4; i < 6; i++) {
+		DrawBrenLineAlg(box[i].x, box[i].y, box[i + 1].x, box[i + 1].y, color);
+	}
+	DrawBrenLineAlg(box[4].x, box[4].y, box[7].x, box[7].y, color);
+	DrawBrenLineAlg(box[4].x, box[4].y, box[0].x, box[0].y, color);
+	DrawBrenLineAlg(box[3].x, box[3].y, box[7].x, box[7].y, color);
+	DrawBrenLineAlg(box[5].x, box[5].y, box[1].x, box[1].y, color);
+	DrawBrenLineAlg(box[6].x, box[6].y, box[2].x, box[2].y, color);
+}
+/*void Renderer::DrawAxesInCenter(MeshModel model, const glm::vec3 color) {
+	for (int i = 0; i < 2; i++) {
+		DrawBrenLineAlg(model.getBox()[i].x, model.getBox()[i].y, model.getBox()[i + 1].x, model.getBox()[i + 1].y, color);
+	}
+	DrawBrenLineAlg(model.getBox()[3].x, model.getBox()[3].y, model.getBox()[0].x, model.getBox()[0].y, color);
+	for (int i = 4; i < 6; i++) {
+		DrawBrenLineAlg(model.getBox()[i].x, model.getBox()[i].y, model.getBox()[i + 1].x, model.getBox()[i + 1].y, color);
+	}
+	DrawBrenLineAlg(model.getBox()[4].x, model.getBox()[4].y, model.getBox()[7].x, model.getBox()[7].y, color);
+	DrawBrenLineAlg(model.getBox()[4].x, model.getBox()[4].y, model.getBox()[0].x, model.getBox()[0].y, color);
+	DrawBrenLineAlg(model.getBox()[3].x, model.getBox()[3].y, model.getBox()[7].x, model.getBox()[7].y, color);
+	DrawBrenLineAlg(model.getBox()[5].x, model.getBox()[5].y, model.getBox()[1].x, model.getBox()[1].y, color);
+	DrawBrenLineAlg(model.getBox()[6].x, model.getBox()[6].y, model.getBox()[2].x, model.getBox()[2].y, color);
+}
+*/
+void Renderer::ScaledAndTransformedModels(const Scene& scene) {
+
+	if (scene.GetModelCount() > 0) {
+
+		for (int i = 0; i < scene.GetModelCount(); i++) {
+
+			MeshModel model = scene.GetModel(i);
+			std::vector<glm::vec3> vertices = model.GetVertices();
+			std::vector<glm::vec3> box = model.getBox();
+			glm::mat3x3 scaleMat = model.getScale();
+
+			for (int i = 0; i < vertices.size(); i++) {
+				glm::mat3x3 v = scaleMat * (glm::mat3x3(vertices[i].x, 0, 0
+					, vertices[i].y, 0, 0
+					, vertices[i].z, 0, 0));
+
+				vertices[i] = glm::vec3(v[0][0], v[1][0], v[2][0]);
+			}
+			for (int i = 0; i < box.size(); i++) {
+				glm::mat3x3 v = scaleMat * (glm::mat3x3(box[i].x, 0, 0
+					, box[i].y, 0, 0
+					, box[i].z, 0, 0));
+
+				box[i] = glm::vec3(v[0][0], v[1][0], v[2][0]);
+			}
+
+			DrawBox(box, glm::vec3(1, 0, 0));
+			auto facesInModel = model.GetFaces();
+
+			for (auto face : facesInModel)
+			{
+
+				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
+				glm::vec3 v1 = vertices[face.GetVertexIndex(1) - 1];
+				glm::vec3 v2 = vertices[face.GetVertexIndex(2) - 1];
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0));
+
+
+			}
+		}
+
+
+
+	}
 }
 void Renderer::Render(const Scene& scene)
 {
@@ -167,26 +240,13 @@ void Renderer::Render(const Scene& scene)
 
 	// Draw a chess board in the middle of the screen
 	auto flag = true;
-	if (scene.GetModelCount() > 0 ) {
-
-		for (int i = 0; i < scene.GetModelCount(); i++) {
-
-			auto model = scene.GetModel(i);
-			auto facesInModel = model.GetFaces();
-			for (auto face : facesInModel)
-			{
-
-				glm::vec3 v0 = model.GetVertices()[face.GetVertexIndex(0)-1];
-				glm::vec3 v1 = model.GetVertices()[face.GetVertexIndex(1)-1];
-				glm::vec3 v2 = model.GetVertices()[face.GetVertexIndex(2)-1];
-				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0));
-
-
-			}
-		}
+	ScaledAndTransformedModels(scene);
+	
+ 
+	
 		
 	
-	}
+	
 	
 	/*for (int i = 0; i < 10; i++) {
 		DrawBrenLineAlg(100 + i * 50, 100, 100 + i * 50, 600, glm::vec3(0, 1, 0));
