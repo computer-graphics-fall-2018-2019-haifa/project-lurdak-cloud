@@ -11,13 +11,12 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	worldTransform(glm::mat4x4(1)),
 	vertices(vertices),
 	faces(faces),
-	normals(normals),
-	modelScale(100, 0, 0
-			, 0, 100, 0
-			, 0, 0, 100)
+	normals(normals)
+	
 
 {
-
+	
+	changeScale(glm::vec3(100, 100, 100));
 	float maxX = vertices[0].x;
 	float maxY = vertices[0].y;
 	float maxZ = vertices[0].z;
@@ -50,6 +49,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 		
 	}
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+	setLocation(glm::vec3(maxX*this->modelScale.x, maxY*this->modelScale.x, 0));
 
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
 	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
@@ -84,13 +84,17 @@ void MeshModel::SetColor(const glm::vec4& color)
 	this->color = color;
 }
 void MeshModel::changeScale(const glm::vec3 scale) {
-	this->modelScale = glm::mat3x3(scale.x, 0, 0
-		, 0, scale.y, 0
-		, 0, 0, scale.z);
+	this->modelScale = glm::vec3(scale.x,  scale.y, scale.z);
 
 }
-const glm::mat3x3  MeshModel::getScale() {
+const glm::vec3  MeshModel::getScale() {
 	return this->modelScale;
+}
+const glm::vec3  MeshModel::getLocation() {
+	return this->modelLocationGlobal;
+}
+void  MeshModel::setLocation(const glm::vec3 location) {
+	 this->modelLocationGlobal=(location);
 }
 const glm::vec4& MeshModel::GetColor() const
 {

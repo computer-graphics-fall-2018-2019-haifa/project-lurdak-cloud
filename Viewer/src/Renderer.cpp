@@ -3,6 +3,7 @@
 #include "Renderer.h"
 #include "InitShader.h"
 #include "MeshModel.h"
+#include "Utils.h"
 #include <imgui/imgui.h>
 #include <vector>
 #include <cmath>
@@ -195,21 +196,22 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			MeshModel model = scene.GetModel(i);
 			std::vector<glm::vec3> vertices = model.GetVertices();
 			std::vector<glm::vec3> box = model.getBox();
-			glm::mat3x3 scaleMat = model.getScale();
+			glm::vec3 scaleMat = model.getScale();
+			glm::vec3 location = model.getLocation();
+
 
 			for (int i = 0; i < vertices.size(); i++) {
-				glm::mat3x3 v = scaleMat * (glm::mat3x3(vertices[i].x, 0, 0
-					, vertices[i].y, 0, 0
-					, vertices[i].z, 0, 0));
-
-				vertices[i] = glm::vec3(v[0][0], v[1][0], v[2][0]);
+				vertices[i] = Utils::matrixMulti(vertices[i], Utils::ScaleMatrix(scaleMat));
+				vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(location));
+				
+				
+				 
 			}
 			for (int i = 0; i < box.size(); i++) {
-				glm::mat3x3 v = scaleMat * (glm::mat3x3(box[i].x, 0, 0
-					, box[i].y, 0, 0
-					, box[i].z, 0, 0));
+				
 
-				box[i] = glm::vec3(v[0][0], v[1][0], v[2][0]);
+				box[i] =  Utils::matrixMulti(box[i], Utils::ScaleMatrix(scaleMat));
+				box[i] = Utils::matrixMulti(box[i], Utils::TranslateMatrix(location));
 			}
 
 			DrawBox(box, glm::vec3(1, 0, 0));

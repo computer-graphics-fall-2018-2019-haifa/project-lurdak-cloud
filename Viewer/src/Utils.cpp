@@ -1,9 +1,11 @@
+#define _USE_MATH_DEFINES
 #include "Utils.h"
 #include <cmath>
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 
 glm::vec3 Utils::Vec3fFromStream(std::istream& issLine)
 {
@@ -68,7 +70,59 @@ MeshModel Utils::LoadMeshModel(const std::string& filePath)
 
 	return MeshModel(faces, vertices, normals, Utils::GetFileName(filePath));
 }
+//uti help in matrix multi , get a vertic and matrix and return the new vertic
+glm::vec3 Utils::matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat) 
+{	
+	float x = mat[0][0]*vertic.x+mat[0][1]*vertic.y+mat[0][2]*vertic.z+mat[0][3]*1 ;
+	float y = mat[1][0] * vertic.x + mat[1][1] * vertic.y + mat[1][2] * vertic.z + mat[1][3] * 1;
+	float z = mat[2][0] * vertic.x + mat[2][1] * vertic.y + mat[2][2] * vertic.z + mat[2][3] * 1;
+	float w = mat[3][0] * vertic.x + mat[3][1] * vertic.y + mat[3][2] * vertic.z + mat[3][3] * 1;
 
+	return glm::vec3(x/w, y / w, z / w);
+}
+//get angel and return rotation matrix
+glm::mat4x4  Utils::RotateZMatrix(float angel) {
+	float angelInRad = (angel*M_PI) / 180;
+ 
+	return glm::mat4x4(cos(angelInRad),-sin(angelInRad), 0, 0
+		, sin(angelInRad), cos(angelInRad), 0, 0
+		, 0, 0, 1, 0
+		, 0, 0, 0, 1);
+}
+
+
+
+glm::mat4x4  Utils::RotateYMatrix(float angel) {
+	float angelInRad = (angel*M_PI) / 180;
+
+	return glm::mat4x4(cos(angelInRad), -sin(angelInRad), 0, 0
+		, sin(angelInRad), cos(angelInRad), 0, 0
+		, 0, 0, 1, 0
+		, 0, 0, 0, 1);
+}
+glm::mat4x4  Utils::RotateXMatrix(float angel) {
+	float angelInRad = (angel*M_PI) / 180;
+
+	return glm::mat4x4(cos(angelInRad), -sin(angelInRad), 0, 0
+		, sin(angelInRad), cos(angelInRad), 0, 0
+		, 0, 0, 1, 0
+		, 0, 0, 0, 1);
+}
+glm::mat4x4  Utils::ScaleMatrix(const glm::vec3 scale) {
+	return glm::mat4x4(scale.x, 0, 0, 0
+		, 0, scale.y, 0, 0
+		, 0, 0, scale.z, 0
+		, 0, 0, 0, 1);
+}
+
+glm::mat4x4  Utils::TranslateMatrix(const glm::vec3 translate) {
+	return glm::mat4x4(1, 0, 0, translate.x
+		, 0, 1, 0, translate.y
+		, 0, 0, 1, translate.z
+		, 0, 0, 0, 1);
+
+
+}
 std::string Utils::GetFileName(const std::string& filePath)
 {
 	if (filePath.empty()) {

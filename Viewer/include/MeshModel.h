@@ -22,10 +22,11 @@ private:
 	glm::vec4 color;
 	std::string modelName;
 	std::vector<glm::vec3> boxPoints;
+	glm::vec3 modelLocationGlobal;
 	glm::vec3 center;
-	glm::mat4x4 modelRotate;
-	glm::mat4x4 modelTranslate;
-	glm::mat3x3 modelScale;
+	glm::vec3 modelSelfRotate;
+	glm::vec3 modelTranslate;
+	glm::vec3 modelScale;
 
 
 
@@ -47,7 +48,9 @@ public:
 	const std::vector<glm::vec3> getBox();
 	const glm::vec3 getCenter();
 	void changeScale(const glm::vec3 scale);
-	const glm::mat3x3  getScale();
+	const glm::vec3  getScale();
+	const glm::vec3   getLocation();
+	void setLocation(const glm::vec3 location);
 
 	// Add more methods/functionality as needed...
 };
