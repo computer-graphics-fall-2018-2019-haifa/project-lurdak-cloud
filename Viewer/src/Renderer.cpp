@@ -8,6 +8,7 @@
 #include <cmath>
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
+#define SIZE 50;
 
 Renderer::Renderer(int viewportWidth, int viewportHeight, int viewportX, int viewportY) :
 	colorBuffer(nullptr),
@@ -117,7 +118,7 @@ void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& co
 		slopError += 2 * deltax;
 	}
 }
-void Renderer::DrawBrenLineAlg(int x0,int y0,int x1, int y1, const glm::vec3& color) {
+void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& color) {
 	float deltax = abs(x1- x0);
 	float deltay = abs(y1 - y0);
 	if (deltax > deltay) {
@@ -142,6 +143,21 @@ void Renderer::DrawBrenLineAlg(int x0,int y0,int x1, int y1, const glm::vec3& co
 
 
 }
+void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
+	int  x0 = v1.x*SIZE;
+	int y0 = v1.y*SIZE;
+	int x1 = v2.x*SIZE;
+	int y1 = v2.y*SIZE;
+	int x2 = v3.x*SIZE;
+	int y2 = v3.y*SIZE;
+
+	DrawBrenLineAlg(x0, y0, x1, y1,color);
+	DrawBrenLineAlg(x1, y1, x2, y2, color);
+	DrawBrenLineAlg(x2, y2, x0, y0, color);
+	 
+
+	
+}
 void Renderer::Render(const Scene& scene)
 {
 	//#############################################
@@ -151,25 +167,31 @@ void Renderer::Render(const Scene& scene)
 
 	// Draw a chess board in the middle of the screen
 	auto flag = true;
-	if (scene.GetModelCount() > 0 && flag) {
-		auto a = scene.GetModel(0);
-		for (auto &attack : a.GetFaces()) 
-		{
-			/*auto v0=a.GetVertices()[attack.GetVertexIndex(0)];
-			auto v1 = a.GetVertices()[attack.GetVertexIndex(1)];
-			auto v2 = a.GetVertices()[attack.GetVertexIndex(2)];
-			DrawBrenLineAlg()*/
-			
-			
+	if (scene.GetModelCount() > 0 ) {
+
+		for (int i = 0; i < scene.GetModelCount(); i++) {
+
+			auto model = scene.GetModel(i);
+			auto facesInModel = model.GetFaces();
+			for (auto face : facesInModel)
+			{
+
+				glm::vec3 v0 = model.GetVertices()[face.GetVertexIndex(0)-1];
+				glm::vec3 v1 = model.GetVertices()[face.GetVertexIndex(1)-1];
+				glm::vec3 v2 = model.GetVertices()[face.GetVertexIndex(2)-1];
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0));
+
+
+			}
 		}
 		
 	
 	}
 	
-	for (int i = 0; i < 10; i++) {
+	/*for (int i = 0; i < 10; i++) {
 		DrawBrenLineAlg(100 + i * 50, 100, 100 + i * 50, 600, glm::vec3(0, 1, 0));
 		DrawBrenLineAlg(100 , 100+50*i, 600, 100 + 50 * i, glm::vec3(0, 1, 0));
-	}
+	}*/
 	
 }
 

@@ -56,3 +56,4 @@ const int Face::GetTextureIndex(int index)
 {
 	return textureIndices[index];
 }
+
