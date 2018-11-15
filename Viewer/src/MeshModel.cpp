@@ -16,7 +16,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 
 {
 	
-	changeScale(glm::vec3(100, 100, 100));
+	
 	float maxX = vertices[0].x;
 	float maxY = vertices[0].y;
 	float maxZ = vertices[0].z;
@@ -49,10 +49,9 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 		
 	}
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
-	setWorldLocation(glm::vec3(400,400, 400));
 	this->modelWorldRotate=(glm::vec3(0, 0, 0));
 	this->modelSelfRotate = (glm::vec3(0, 0, 0));
-	
+	changeScale(glm::vec3(100, 100, 100));
 
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
 	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
