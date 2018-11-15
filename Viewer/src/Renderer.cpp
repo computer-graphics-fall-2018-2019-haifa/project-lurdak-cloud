@@ -204,6 +204,8 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			for (int i = 0; i < vertices.size(); i++) {
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::ScaleMatrix(scaleMat));
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateZMatrix(rotate.z));
+				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateYMatrix(rotate.y));
+				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateXMatrix(rotate.x));
 
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(location));
 

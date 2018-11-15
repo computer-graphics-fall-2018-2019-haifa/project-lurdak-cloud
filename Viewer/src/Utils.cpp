@@ -92,21 +92,23 @@ glm::mat4x4  Utils::RotateZMatrix(float angel) {
 
 
 
-glm::mat4x4  Utils::RotateYMatrix(float angel) {
-	float angelInRad = (angel*M_PI) / 180;
-
-	return glm::mat4x4(cos(angelInRad), -sin(angelInRad), 0, 0
-		, sin(angelInRad), cos(angelInRad), 0, 0
-		, 0, 0, 1, 0
-		, 0, 0, 0, 1);
-}
 glm::mat4x4  Utils::RotateXMatrix(float angel) {
 	float angelInRad = (angel*M_PI) / 180;
 
-	return glm::mat4x4(cos(angelInRad), -sin(angelInRad), 0, 0
-		, sin(angelInRad), cos(angelInRad), 0, 0
-		, 0, 0, 1, 0
+	return glm::mat4x4(1,0,0,0,
+		0,cos(angelInRad), -sin(angelInRad), 0
+		,0, sin(angelInRad), cos(angelInRad),0
+	 
 		, 0, 0, 0, 1);
+}
+glm::mat4x4  Utils::RotateYMatrix(float angel) {
+	float angelInRad = (angel*M_PI) / 180;
+
+	return glm::mat4x4(cos(angelInRad),0, -sin(angelInRad),0,
+		0,1,0,0,
+		sin(angelInRad),0, cos(angelInRad),0 ,
+		0,0,0,1
+		);
 }
 glm::mat4x4  Utils::ScaleMatrix(const glm::vec3 scale) {
 	return glm::mat4x4(scale.x, 0, 0, 0
