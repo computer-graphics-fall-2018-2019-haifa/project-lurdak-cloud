@@ -76,8 +76,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		 
 		if (scaleZ <= 0)scaleZ = 0.01;
 		//location
-		ImGui::InputFloat("LGlobal X", &LX, 0, 0, 2); ImGui::SameLine(120);
-		ImGui::InputFloat("LGlobal Y", &LY, 0, 0, 2); ImGui::SameLine(240);
+		ImGui::InputFloat("LGlobal X", &LX, 0, 0, 2); ImGui::SameLine(140);
+		ImGui::InputFloat("LGlobal Y", &LY, 0, 0, 2); ImGui::SameLine(280);
 		ImGui::InputFloat("LGlobal z", &LZ, 0, 0, 2);
 
 		ImGui::InputFloat("Rotate Self z", &RZ, 0, 0, 2); ImGui::SameLine(220);
