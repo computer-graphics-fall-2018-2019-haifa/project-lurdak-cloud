@@ -194,30 +194,14 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 		for (int i = 0; i < scene.GetModelCount(); i++) {
 
 			MeshModel model = * scene.GetModel(i);
-			std::vector<glm::vec3> vertices = model.GetVertices();
+			std::vector<glm::vec3> vertices = model.GetFixedVertices();
 			std::vector<glm::vec3> box = model.getBox();
 			glm::vec3 scaleMat = model.getScale();
 			glm::vec3 location = model.getLocation();
 			glm::vec3 rotate = model.getSelfRotate();
 
 
-			for (int i = 0; i < vertices.size(); i++) {
-				vertices[i] = Utils::matrixMulti(vertices[i], Utils::ScaleMatrix(scaleMat));
-				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateZMatrix(rotate.z));
-				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateYMatrix(rotate.y));
-				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateXMatrix(rotate.x));
-
-				vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(location));
-
-
-
-			}
-			for (int i = 0; i < box.size(); i++) {
-
-
-				box[i] = Utils::matrixMulti(box[i], Utils::ScaleMatrix(scaleMat));
-				box[i] = Utils::matrixMulti(box[i], Utils::TranslateMatrix(location));
-			}
+			
 			if (model.isShowBox()) {
 				DrawBox(box, glm::vec3(1, 0, 0));
 			}
