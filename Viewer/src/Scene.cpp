@@ -14,9 +14,9 @@ void Scene::AddModel(const std::shared_ptr<MeshModel>& model)
 {
 	models.push_back(model);
 }
-const MeshModel Scene::GetModel(int index)const
+ MeshModel * Scene::GetModel(int index)const
 {
-	return *models[index];
+	return  &*models[index];
 }
 
 const int Scene::GetModelCount() const

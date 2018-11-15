@@ -17,6 +17,7 @@ private:
 	std::vector<glm::vec3> normals;
 	glm::mat4x4 worldTransform;
 	glm::mat4x4 worldRotate;
+	bool showBox;
  
 	
 	glm::vec4 color;
@@ -36,9 +37,10 @@ public:
 
 	void SetWorldTransformation(const glm::mat4x4& worldTransform);
 	const glm::mat4x4& GetWorldTransformation() const;
-
+	const bool isShowBox();
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
+	void ChangeShowBox();
 
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);

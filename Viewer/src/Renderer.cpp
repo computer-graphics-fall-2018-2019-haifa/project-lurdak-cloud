@@ -188,12 +188,12 @@ void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
 }
 */
 void Renderer::ScaledAndTransformedModels(const Scene& scene) {
-
+	
 	if (scene.GetModelCount() > 0) {
 
 		for (int i = 0; i < scene.GetModelCount(); i++) {
 
-			MeshModel model = scene.GetModel(i);
+			MeshModel model = * scene.GetModel(i);
 			std::vector<glm::vec3> vertices = model.GetVertices();
 			std::vector<glm::vec3> box = model.getBox();
 			glm::vec3 scaleMat = model.getScale();
@@ -203,18 +203,19 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			for (int i = 0; i < vertices.size(); i++) {
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::ScaleMatrix(scaleMat));
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(location));
-				
-				
-				 
+
+
+
 			}
 			for (int i = 0; i < box.size(); i++) {
-				
 
-				box[i] =  Utils::matrixMulti(box[i], Utils::ScaleMatrix(scaleMat));
+
+				box[i] = Utils::matrixMulti(box[i], Utils::ScaleMatrix(scaleMat));
 				box[i] = Utils::matrixMulti(box[i], Utils::TranslateMatrix(location));
 			}
-
-			DrawBox(box, glm::vec3(1, 0, 0));
+			if (model.isShowBox()) {
+				DrawBox(box, glm::vec3(1, 0, 0));
+			}
 			auto facesInModel = model.GetFaces();
 
 			for (auto face : facesInModel)
@@ -227,6 +228,8 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 
 
 			}
+			
+
 		}
 
 
@@ -241,8 +244,9 @@ void Renderer::Render(const Scene& scene)
 	//#############################################
 
 	// Draw a chess board in the middle of the screen
-	auto flag = true;
+	
 	ScaledAndTransformedModels(scene);
+	
 	
  
 	

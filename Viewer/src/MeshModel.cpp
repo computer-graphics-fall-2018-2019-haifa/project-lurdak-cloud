@@ -59,6 +59,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints.push_back(glm::vec3(maxX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
+	showBox = false;
 
 
 
@@ -119,6 +120,12 @@ const std::vector<Face> MeshModel::GetFaces()
 }
 const std::vector<glm::vec3> MeshModel::getBox() {
 	return  this->boxPoints;
+}
+void MeshModel::ChangeShowBox() {
+	this->showBox = !this->showBox;
+}
+const bool MeshModel::isShowBox() {
+	return this->showBox;
 }
 const glm::vec3 MeshModel::getCenter() {
 	return  this->center;

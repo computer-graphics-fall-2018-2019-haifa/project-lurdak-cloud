@@ -4,6 +4,7 @@
 #include "ImguiMenus.h"
 #include "MeshModel.h"
 #include "Utils.h"
+ 
 #include <cmath>
 #include <memory>
 #include <stdio.h>
@@ -29,12 +30,19 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	if (showDemoWindow)
 	{
 		ImGui::ShowDemoWindow(&showDemoWindow);
+		//ImGui::show
 	}
 
 	// 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 	{
 		static float f = 0.0f;
 		static int counter = 0;
+		static float scaleX = 100;
+		static float scaleY = 100;
+		static float scaleZ = 100;
+		static float LX = 100;
+		static float LY = 100;
+		static float LZ = 100;
 
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
@@ -49,6 +57,30 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			counter++;
 		ImGui::SameLine();
 		ImGui::Text("counter = %d", counter);
+		ImGui::PushItemWidth(50);
+		
+		ImGui::InputFloat("Scale X", &scaleX,0,0,2); ImGui::SameLine(120);
+		 ImGui::InputFloat("Scale Y", &scaleY,0,0,2 ); ImGui::SameLine(240);
+		 ImGui::InputFloat("Scale Z", &scaleZ ,0,0,2);   
+		//scaleX
+		 
+		if (scaleX <= 0)scaleX = 0.01;
+		//scale y
+ 
+		if (scaleY <= 0)scaleY = 0.01;
+		//scalez
+		 
+		if (scaleZ <= 0)scaleZ = 0.01;
+		//location
+		ImGui::InputFloat("LGlobal X", &LX, 0, 0, 2); ImGui::SameLine(120);
+		ImGui::InputFloat("LGlobal Y", &LY, 0, 0, 2); ImGui::SameLine(240);
+		ImGui::InputFloat("LGlobal z", &LZ, 0, 0, 2);
+
+		if (scene.GetModelCount() > 0) {
+		scene.GetModel(scene.GetActiveModelIndex())->changeScale(glm::vec3(scaleX, scaleY, scaleZ));
+		scene.GetModel(scene.GetActiveModelIndex())->setLocation(glm::vec3(LX, LY, LZ));
+		}
+		
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
