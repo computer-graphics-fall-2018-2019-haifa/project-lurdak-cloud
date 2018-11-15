@@ -45,7 +45,7 @@ public:
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
 	const std::vector<glm::vec3>  GetVertices();
-
+	const glm::vec3 getSelfRotate();
 	const std::vector<Face>  GetFaces();
 	const std::vector<glm::vec3> getBox();
 	const glm::vec3 getCenter();
@@ -53,6 +53,7 @@ public:
 	const glm::vec3  getScale();
 	const glm::vec3   getLocation();
 	void setLocation(const glm::vec3 location);
+	void 	setSelfRotate(const glm::vec3 rotate);
 
 	// Add more methods/functionality as needed...
 };

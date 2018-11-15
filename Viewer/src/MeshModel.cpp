@@ -91,11 +91,17 @@ void MeshModel::changeScale(const glm::vec3 scale) {
 const glm::vec3  MeshModel::getScale() {
 	return this->modelScale;
 }
+const glm::vec3  MeshModel::getSelfRotate() {
+	return this->modelSelfRotate;
+}
 const glm::vec3  MeshModel::getLocation() {
 	return this->modelLocationGlobal;
 }
 void  MeshModel::setLocation(const glm::vec3 location) {
 	 this->modelLocationGlobal=(location);
+}
+void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
+	this->modelSelfRotate = (rotate);
 }
 const glm::vec4& MeshModel::GetColor() const
 {

@@ -43,6 +43,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float LX = 100;
 		static float LY = 100;
 		static float LZ = 100;
+		static float RZ = 0;
 
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
 
@@ -76,9 +77,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("LGlobal Y", &LY, 0, 0, 2); ImGui::SameLine(240);
 		ImGui::InputFloat("LGlobal z", &LZ, 0, 0, 2);
 
+		ImGui::InputFloat("Rotate Self z", &RZ, 0, 0, 2);
+
 		if (scene.GetModelCount() > 0) {
 		scene.GetModel(scene.GetActiveModelIndex())->changeScale(glm::vec3(scaleX, scaleY, scaleZ));
 		scene.GetModel(scene.GetActiveModelIndex())->setLocation(glm::vec3(LX, LY, LZ));
+		scene.GetModel(scene.GetActiveModelIndex())->setSelfRotate(glm::vec3(0, 0, RZ));
 		}
 		
 

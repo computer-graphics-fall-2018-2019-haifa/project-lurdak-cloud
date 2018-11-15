@@ -198,10 +198,13 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			std::vector<glm::vec3> box = model.getBox();
 			glm::vec3 scaleMat = model.getScale();
 			glm::vec3 location = model.getLocation();
+			glm::vec3 rotate = model.getSelfRotate();
 
 
 			for (int i = 0; i < vertices.size(); i++) {
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::ScaleMatrix(scaleMat));
+				vertices[i] = Utils::matrixMulti(vertices[i], Utils::RotateZMatrix(rotate.z));
+
 				vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(location));
 
 
