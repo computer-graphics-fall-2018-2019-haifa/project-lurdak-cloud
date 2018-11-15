@@ -60,6 +60,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints.push_back(glm::vec3(minX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
 	showBox = false;
+	FixVert();
 
 
 
@@ -84,10 +85,26 @@ void MeshModel::SetColor(const glm::vec4& color)
 {
 	this->color = color;
 }
-void MeshModel::changeScale(const glm::vec3 scale) {
-	this->modelScale = glm::vec3(scale.x,  scale.y, scale.z);
-
+void MeshModel::FixVert() {
+	this->FixedVer = this->vertices;
+	for (int i = 0; i < this->FixedVer.size(); i++) {
+		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::ScaleMatrix(this->modelScale));
+		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateZMatrix(this->modelSelfRotate.z));
+		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateYMatrix(this->modelSelfRotate.y));
+		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateXMatrix(this->modelSelfRotate.x));
+		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::TranslateMatrix(this->modelLocationGlobal));
+	}
+	for (int i = 0; i < this->boxPoints.size(); i++) {
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::ScaleMatrix(this->modelScale));
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateZMatrix(this->modelSelfRotate.z));
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateYMatrix(this->modelSelfRotate.y));
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateXMatrix(this->modelSelfRotate.x));
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::TranslateMatrix(this->modelLocationGlobal));
+	}
 }
+
+
+
 const glm::vec3  MeshModel::getScale() {
 	return this->modelScale;
 }
@@ -99,9 +116,15 @@ const glm::vec3  MeshModel::getLocation() {
 }
 void  MeshModel::setLocation(const glm::vec3 location) {
 	 this->modelLocationGlobal=(location);
+	 FixVert();
 }
 void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
 	this->modelSelfRotate = (rotate);
+	FixVert();
+}
+void MeshModel::changeScale(const glm::vec3 scale) {
+	this->modelScale = glm::vec3(scale.x, scale.y, scale.z);
+	FixVert();
 }
 const glm::vec4& MeshModel::GetColor() const
 {
@@ -120,6 +143,12 @@ const std::vector<glm::vec3> MeshModel::GetVertices()
 {
 	return this->vertices;
 }
+const std::vector<glm::vec3> MeshModel::GetFixedVertices()
+{
+	return this->FixedVer;
+}
+
+
 const std::vector<Face> MeshModel::GetFaces()
 {
 	return this->faces;
