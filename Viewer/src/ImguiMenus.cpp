@@ -16,12 +16,15 @@
 
 bool showDemoWindow = false;
 bool showAnotherWindow = false;
-glm::vec3 scale;
-glm::vec3 location;
-glm::vec3 rotate;
-glm::vec3 deltaScale;
-glm::vec3 deltaLocation;
-glm::vec3 deltaRotate; 
+glm::vec3 scale=glm::vec3(100);
+glm::vec3 location= glm::vec3(400);
+glm::vec3 rotate=glm::vec3(0);
+glm::vec3 worldRotate = glm::vec3(0);
+glm::vec3 deltaScale= glm::vec3(100);
+glm::vec3 deltaLocation= glm::vec3(0);
+glm::vec3 deltaWorldRotate= glm::vec3(0);
+glm::vec3 deltaRotate = glm::vec3(0);
+bool check = false;
 
 glm::vec4 clearColor = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
 
@@ -63,6 +66,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		deltaScale = scale;
 		deltaLocation = location;
 		deltaRotate = rotate;
+		deltaWorldRotate = worldRotate;
 		ImGui::InputFloat("Scale X", &scale.x,0,0,2); ImGui::SameLine(120);
 		 ImGui::InputFloat("Scale Y", &scale.y,0,0,2 ); ImGui::SameLine(240);
 		 ImGui::InputFloat("Scale Z", &scale.z ,0,0,2);   
@@ -90,12 +94,19 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("Rotate Self X", &rotate.x, 0, 0, 2); ImGui::SameLine(220);
 		ImGui::InputFloat("Rotate Self Y", &rotate.y, 0, 0, 2); ImGui::SameLine(440);
 		ImGui::InputFloat("Rotate Self Z", &rotate.z, 0, 0, 2);
-
+	
+		ImGui::InputFloat("Rotate World X", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
+		ImGui::InputFloat("Rotate World Y", &worldRotate.y, 0, 0, 2); ImGui::SameLine(440);
+		ImGui::InputFloat("Rotate World Z", &worldRotate.z, 0, 0, 2);
+		ImGui::Checkbox("box", &check);
+			
 		if (scene.GetModelCount() > 0) {
-			if (scale != deltaScale || rotate != deltaRotate || location !=deltaLocation) {
+			scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
+			if (scale != deltaScale || rotate != deltaRotate || location !=deltaLocation || worldRotate!=deltaWorldRotate) {
 				scene.GetModel(scene.GetActiveModelIndex())->changeScale(scale);
 				scene.GetModel(scene.GetActiveModelIndex())->setSelfRotate(rotate);
-				scene.GetModel(scene.GetActiveModelIndex())->setLocation(location);
+				scene.GetModel(scene.GetActiveModelIndex())->setWorldLocation(location);
+				scene.GetModel(scene.GetActiveModelIndex())->setWorldRotation(worldRotate);
 			}
 		
 		}

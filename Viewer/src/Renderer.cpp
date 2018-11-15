@@ -159,11 +159,11 @@ void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::
 	
 }
 void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		DrawBrenLineAlg(box[i].x, box[i].y, box[i + 1].x, box[i + 1].y,color);
 	}
 	DrawBrenLineAlg(box[3].x, box[3].y, box[0].x, box[0].y,color);
-	for (int i = 4; i < 6; i++) {
+	for (int i = 4; i < 7; i++) {
 		DrawBrenLineAlg(box[i].x, box[i].y, box[i + 1].x, box[i + 1].y, color);
 	}
 	DrawBrenLineAlg(box[4].x, box[4].y, box[7].x, box[7].y, color);
@@ -196,9 +196,7 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			MeshModel model = * scene.GetModel(i);
 			std::vector<glm::vec3> vertices = model.GetFixedVertices();
 			std::vector<glm::vec3> box = model.getBox();
-			glm::vec3 scaleMat = model.getScale();
-			glm::vec3 location = model.getLocation();
-			glm::vec3 rotate = model.getSelfRotate();
+	
 
 
 			

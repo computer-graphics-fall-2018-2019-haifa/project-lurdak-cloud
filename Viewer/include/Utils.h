@@ -18,7 +18,9 @@ public:
 	static glm::mat4x4 RotateYMatrix(float angel);
 	static glm::mat4x4 TranslateMatrix(const glm::vec3 vertic);
 	static glm::mat4x4 ScaleMatrix(const glm::vec3 vertic);
+	static glm::mat4x4   RotateMatrix(glm::vec3 rotate);
 
+	static glm::vec2 d2vd3(const glm::vec3 vertic);
 
 	static glm::vec3 matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat);
 	// Add here more static utility functions...

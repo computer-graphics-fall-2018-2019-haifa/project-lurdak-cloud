@@ -80,6 +80,12 @@ glm::vec3 Utils::matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat)
 
 	return glm::vec3(x/w, y / w, z / w);
 }
+glm::vec2 Utils::d2vd3(const glm::vec3 vertic)
+{
+ 
+
+	return glm::vec2(vertic.x / vertic.z, vertic.y/ vertic.z);
+}
 //get angel and return rotation matrix
 glm::mat4x4  Utils::RotateZMatrix(float angel) {
 	float angelInRad = (angel*M_PI) / 180;
@@ -89,7 +95,10 @@ glm::mat4x4  Utils::RotateZMatrix(float angel) {
 		, 0, 0, 1, 0
 		, 0, 0, 0, 1);
 }
-
+glm::mat4x4  Utils::RotateMatrix(glm::vec3 rotate) {
+	glm::mat4x4 help = RotateXMatrix(rotate.x)*RotateYMatrix(rotate.y)*RotateZMatrix(rotate.z);
+	return  help;
+}
 
 
 glm::mat4x4  Utils::RotateXMatrix(float angel) {

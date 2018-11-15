@@ -23,7 +23,10 @@ private:
 	glm::vec4 color;
 	std::string modelName;
 	std::vector<glm::vec3> boxPoints;
-	glm::vec3 modelLocationGlobal;
+	std::vector<glm::vec3> boxPoints2;
+	
+	glm::vec3 modelWorldLocation;
+	glm::vec3 modelWorldRotate;
 	glm::vec3 center;
 	glm::vec3 modelSelfRotate;
 	glm::vec3 modelTranslate;
@@ -42,7 +45,7 @@ public:
 	const bool isShowBox();
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
-	void ChangeShowBox();
+	 
 	const std::vector<glm::vec3> GetFixedVertices();
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
@@ -53,9 +56,10 @@ public:
 	const glm::vec3 getCenter();
 	void changeScale(const glm::vec3 scale);
 	const glm::vec3  getScale();
-	const glm::vec3   getLocation();
-	void setLocation(const glm::vec3 location);
+	const glm::vec3   getWorldLocation();
+	void setWorldLocation(const glm::vec3 location);
+	void setWorldRotation(const glm::vec3 rotate);
 	void 	setSelfRotate(const glm::vec3 rotate);
-
+	void ChangeShowBox(bool check);
 	// Add more methods/functionality as needed...
 };

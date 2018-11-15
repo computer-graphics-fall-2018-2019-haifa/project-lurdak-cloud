@@ -8,7 +8,7 @@
 
 MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::string& modelName) :
 	modelName(modelName),
-	worldTransform(glm::mat4x4(1)),
+	worldTransform(Utils::TranslateMatrix(glm::vec3(400, 400, 400))),
 	vertices(vertices),
 	faces(faces),
 	normals(normals)
@@ -49,7 +49,10 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 		
 	}
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
-	setLocation(glm::vec3(maxX*this->modelScale.x, maxY*this->modelScale.x, 0));
+	setWorldLocation(glm::vec3(400,400, 400));
+	this->modelWorldRotate=(glm::vec3(0, 0, 0));
+	this->modelSelfRotate = (glm::vec3(0, 0, 0));
+	
 
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
 	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
@@ -59,6 +62,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints.push_back(glm::vec3(maxX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
+	this->boxPoints2 = this->boxPoints;
 	showBox = false;
 	FixVert();
 
@@ -87,19 +91,20 @@ void MeshModel::SetColor(const glm::vec4& color)
 }
 void MeshModel::FixVert() {
 	this->FixedVer = this->vertices;
+	this->boxPoints = this->boxPoints2;
+	glm::mat4 myModelMatrix = Utils::TranslateMatrix(this->center) *Utils::RotateMatrix(this->modelSelfRotate) * Utils::ScaleMatrix(this->modelScale);
+	glm::mat4 myGlobalMatrix = Utils::TranslateMatrix(this->modelWorldLocation)* Utils::RotateMatrix(this->modelWorldRotate);
 	for (int i = 0; i < this->FixedVer.size(); i++) {
-		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::ScaleMatrix(this->modelScale));
-		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateZMatrix(this->modelSelfRotate.z));
-		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateYMatrix(this->modelSelfRotate.y));
-		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::RotateXMatrix(this->modelSelfRotate.x));
-		this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], Utils::TranslateMatrix(this->modelLocationGlobal));
+			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myModelMatrix);
+			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myGlobalMatrix);
+
+ 
 	}
 	for (int i = 0; i < this->boxPoints.size(); i++) {
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::ScaleMatrix(this->modelScale));
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateZMatrix(this->modelSelfRotate.z));
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateYMatrix(this->modelSelfRotate.y));
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::RotateXMatrix(this->modelSelfRotate.x));
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::TranslateMatrix(this->modelLocationGlobal));
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myModelMatrix);
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myGlobalMatrix);
+
+ 
 	}
 }
 
@@ -111,12 +116,16 @@ const glm::vec3  MeshModel::getScale() {
 const glm::vec3  MeshModel::getSelfRotate() {
 	return this->modelSelfRotate;
 }
-const glm::vec3  MeshModel::getLocation() {
-	return this->modelLocationGlobal;
+const glm::vec3  MeshModel::getWorldLocation() {
+	return this->modelWorldLocation;
 }
-void  MeshModel::setLocation(const glm::vec3 location) {
-	 this->modelLocationGlobal=(location);
+void  MeshModel::setWorldLocation(const glm::vec3 location) {
+	 this->modelWorldLocation =(location);
 	 FixVert();
+}
+void  MeshModel::setWorldRotation(const glm::vec3 rotate) {
+	this->modelWorldRotate = (rotate);
+	FixVert();
 }
 void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
 	this->modelSelfRotate = (rotate);
@@ -156,8 +165,8 @@ const std::vector<Face> MeshModel::GetFaces()
 const std::vector<glm::vec3> MeshModel::getBox() {
 	return  this->boxPoints;
 }
-void MeshModel::ChangeShowBox() {
-	this->showBox = !this->showBox;
+void MeshModel::ChangeShowBox(bool check) {
+	this->showBox = check;
 }
 const bool MeshModel::isShowBox() {
 	return this->showBox;
