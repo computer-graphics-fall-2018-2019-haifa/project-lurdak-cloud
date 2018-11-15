@@ -28,6 +28,8 @@ private:
 	glm::vec3 modelSelfRotate;
 	glm::vec3 modelTranslate;
 	glm::vec3 modelScale;
+	std::vector<glm::vec3>  FixedVer;//save the vertices after multi with transfor matrixes
+	void FixVert();
 
 
 
@@ -41,7 +43,7 @@ public:
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
 	void ChangeShowBox();
-
+	const std::vector<glm::vec3> GetFixedVertices();
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
 	const std::vector<glm::vec3>  GetVertices();

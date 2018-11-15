@@ -16,6 +16,12 @@
 
 bool showDemoWindow = false;
 bool showAnotherWindow = false;
+glm::vec3 scale;
+glm::vec3 location;
+glm::vec3 rotate;
+glm::vec3 deltaScale;
+glm::vec3 deltaLocation;
+glm::vec3 deltaRotate; 
 
 glm::vec4 clearColor = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
 
@@ -37,15 +43,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	{
 		static float f = 0.0f;
 		static int counter = 0;
-		static float scaleX = 100;
-		static float scaleY = 100;
-		static float scaleZ = 100;
-		static float LX = 100;
-		static float LY = 100;
-		static float LZ = 100;
-		static float RZ = 0;
-		static float RY = 0;
-		static float RX = 0;
+
 
 
 		ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
@@ -62,32 +60,44 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::SameLine();
 		ImGui::Text("counter = %d", counter);
 		ImGui::PushItemWidth(50);
-		
-		ImGui::InputFloat("Scale X", &scaleX,0,0,2); ImGui::SameLine(120);
-		 ImGui::InputFloat("Scale Y", &scaleY,0,0,2 ); ImGui::SameLine(240);
-		 ImGui::InputFloat("Scale Z", &scaleZ ,0,0,2);   
+		deltaScale = scale;
+		deltaLocation = location;
+		deltaRotate = rotate;
+		ImGui::InputFloat("Scale X", &scale.x,0,0,2); ImGui::SameLine(120);
+		 ImGui::InputFloat("Scale Y", &scale.y,0,0,2 ); ImGui::SameLine(240);
+		 ImGui::InputFloat("Scale Z", &scale.z ,0,0,2);   
 		//scaleX
 		 
-		if (scaleX <= 0)scaleX = 0.01;
+		 if (scale.x <= 0) {
+			 scale.x = 0.01;
+		 }
 		//scale y
  
-		if (scaleY <= 0)scaleY = 0.01;
+		 if (scale.y <= 0) {
+			 scale.y = 0.01;
+
+		 }
 		//scalez
 		 
-		if (scaleZ <= 0)scaleZ = 0.01;
+		 if (scale.z <= 0) {
+			 scale.z = 0.01;
+		 }
 		//location
-		ImGui::InputFloat("LGlobal X", &LX, 0, 0, 2); ImGui::SameLine(140);
-		ImGui::InputFloat("LGlobal Y", &LY, 0, 0, 2); ImGui::SameLine(280);
-		ImGui::InputFloat("LGlobal z", &LZ, 0, 0, 2);
+		ImGui::InputFloat("LGlobal X", &location.x, 0, 0, 2); ImGui::SameLine(140);
+		ImGui::InputFloat("LGlobal Y", &location.y, 0, 0, 2); ImGui::SameLine(280);
+		ImGui::InputFloat("LGlobal z", &location.z, 0, 0, 2);
 
-		ImGui::InputFloat("Rotate Self z", &RZ, 0, 0, 2); ImGui::SameLine(220);
-		ImGui::InputFloat("Rotate Self Y", &RY, 0, 0, 2); ImGui::SameLine(440);
-		ImGui::InputFloat("Rotate Self X", &RX, 0, 0, 2);
+		ImGui::InputFloat("Rotate Self X", &rotate.x, 0, 0, 2); ImGui::SameLine(220);
+		ImGui::InputFloat("Rotate Self Y", &rotate.y, 0, 0, 2); ImGui::SameLine(440);
+		ImGui::InputFloat("Rotate Self Z", &rotate.z, 0, 0, 2);
 
 		if (scene.GetModelCount() > 0) {
-		scene.GetModel(scene.GetActiveModelIndex())->changeScale(glm::vec3(scaleX, scaleY, scaleZ));
-		scene.GetModel(scene.GetActiveModelIndex())->setLocation(glm::vec3(LX, LY, LZ));
-		scene.GetModel(scene.GetActiveModelIndex())->setSelfRotate(glm::vec3(RX, RY, RZ));
+			if (scale != deltaScale || rotate != deltaRotate || location !=deltaLocation) {
+				scene.GetModel(scene.GetActiveModelIndex())->changeScale(scale);
+				scene.GetModel(scene.GetActiveModelIndex())->setSelfRotate(rotate);
+				scene.GetModel(scene.GetActiveModelIndex())->setLocation(location);
+			}
+		
 		}
 		
 
