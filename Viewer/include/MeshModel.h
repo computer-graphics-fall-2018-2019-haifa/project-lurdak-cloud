@@ -61,5 +61,6 @@ public:
 	void setWorldRotation(const glm::vec3 rotate);
 	void 	setSelfRotate(const glm::vec3 rotate);
 	void ChangeShowBox(bool check);
+	void MeshModel::RecenterModel();
 	// Add more methods/functionality as needed...
 };

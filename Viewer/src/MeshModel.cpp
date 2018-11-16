@@ -48,11 +48,11 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 
 		
 	}
+
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
 	this->modelWorldRotate=(glm::vec3(0, 0, 0));
 	this->modelSelfRotate = (glm::vec3(0, 0, 0));
 	changeScale(glm::vec3(100, 100, 100));
-
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
 	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
 	this->boxPoints.push_back(glm::vec3(minX, minY, minZ));
@@ -64,6 +64,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints2 = this->boxPoints;
 	showBox = false;
 	FixVert();
+	//RecenterModel();
 
 
 
@@ -72,6 +73,15 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 MeshModel::~MeshModel()
 {
 
+}
+void MeshModel::RecenterModel() {
+/*	for (int i = 0; i < this->vertices.size(); i++) {
+		this->vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(-this->center));
+		
+	}
+	for (int i = 0; i < this->boxPoints.size(); i++) {
+		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::TranslateMatrix(-this->center));
+	}*/
 }
 
 void MeshModel::SetWorldTransformation(const glm::mat4x4& worldTransform)
@@ -91,7 +101,7 @@ void MeshModel::SetColor(const glm::vec4& color)
 void MeshModel::FixVert() {
 	this->FixedVer = this->vertices;
 	this->boxPoints = this->boxPoints2;
-	glm::mat4 myModelMatrix = Utils::TranslateMatrix(this->center) *Utils::RotateMatrix(this->modelSelfRotate) * Utils::ScaleMatrix(this->modelScale);
+	glm::mat4 myModelMatrix = Utils::TranslateMatrix(-this->center) *Utils::RotateMatrix(this->modelSelfRotate) * Utils::ScaleMatrix(this->modelScale);
 	glm::mat4 myGlobalMatrix = Utils::TranslateMatrix(this->modelWorldLocation)* Utils::RotateMatrix(this->modelWorldRotate);
 	for (int i = 0; i < this->FixedVer.size(); i++) {
 			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myModelMatrix);
