@@ -144,12 +144,12 @@ void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& 
 
 }
 void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
-	int  x0 = v1.x;
-	int y0 = v1.y;
-	int x1 = v2.x;
-	int y1 = v2.y;
-	int x2 = v3.x;
-	int y2 = v3.y;
+	int  x0 = v1.x; 
+	int y0 = v1.y; 
+	int x1 = v2.x; 
+	int y1 = v2.y; 
+	int x2 = v3.x; 
+	int y2 = v3.y;; 
 
 	DrawBrenLineAlg(x0, y0, x1, y1,color);
 	DrawBrenLineAlg(x1, y1, x2, y2, color);

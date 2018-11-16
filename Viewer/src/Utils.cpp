@@ -48,6 +48,7 @@ MeshModel Utils::LoadMeshModel(const std::string& filePath)
 		}
 		else if (lineType == "vn")
 		{
+			normals.push_back(Utils::Vec3fFromStream(issLine));
 			// Add the required code here...
 		}
 		else if (lineType == "vt")
@@ -92,8 +93,8 @@ glm::mat4x4  Utils::RotateZMatrix(float angel) {
  
 	return glm::mat4x4(cos(angelInRad),-sin(angelInRad), 0, 0
 		, sin(angelInRad), cos(angelInRad), 0, 0
-		, 0, 0, 1, 0
-		, 0, 0, 0, 1);
+		, 0, 0, 1.0f, 0
+		, 0, 0, 0, 1.0f);
 }
 glm::mat4x4  Utils::RotateMatrix(glm::vec3 rotate) {
 	glm::mat4x4 help = RotateXMatrix(rotate.x)*RotateYMatrix(rotate.y)*RotateZMatrix(rotate.z);
@@ -114,23 +115,30 @@ glm::mat4x4  Utils::RotateYMatrix(float angel) {
 	float angelInRad = (angel*M_PI) / 180;
 
 	return glm::mat4x4(cos(angelInRad),0, -sin(angelInRad),0,
-		0,1,0,0,
+		0, 1.0f,0,0,
 		sin(angelInRad),0, cos(angelInRad),0 ,
-		0,0,0,1
+		0,0,0, 1.0f
 		);
 }
+glm::mat4x4  Utils::UniformScaleMatrix(const float scale) {
+	return glm::mat4x4(1.0f, 0, 0, 0
+		, 0, 1.0f, 0, 0
+		, 0, 0, 1.0f, 0
+		, 0, 0, 0, 1/scale);
+}
+
 glm::mat4x4  Utils::ScaleMatrix(const glm::vec3 scale) {
 	return glm::mat4x4(scale.x, 0, 0, 0
 		, 0, scale.y, 0, 0
 		, 0, 0, scale.z, 0
-		, 0, 0, 0, 1);
+		, 0, 0, 0, 1.0f);
 }
 
 glm::mat4x4  Utils::TranslateMatrix(const glm::vec3 translate) {
-	return glm::mat4x4(1, 0, 0, translate.x
-		, 0, 1, 0, translate.y
-		, 0, 0, 1, translate.z
-		, 0, 0, 0, 1);
+	return glm::mat4x4(1.0f, 0, 0, translate.x
+		, 0, 1.0f, 0, translate.y
+		, 0, 0, 1.0f, translate.z
+		, 0, 0, 0, 1.0f);
 
 
 }

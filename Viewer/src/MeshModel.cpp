@@ -64,8 +64,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints2 = this->boxPoints;
 	showBox = false;
 	FixVert();
-	//RecenterModel();
-
+	
 
 
 }
@@ -74,15 +73,7 @@ MeshModel::~MeshModel()
 {
 
 }
-void MeshModel::RecenterModel() {
-/*	for (int i = 0; i < this->vertices.size(); i++) {
-		this->vertices[i] = Utils::matrixMulti(vertices[i], Utils::TranslateMatrix(-this->center));
-		
-	}
-	for (int i = 0; i < this->boxPoints.size(); i++) {
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], Utils::TranslateMatrix(-this->center));
-	}*/
-}
+
 
 void MeshModel::SetWorldTransformation(const glm::mat4x4& worldTransform)
 {

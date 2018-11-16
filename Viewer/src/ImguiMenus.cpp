@@ -25,6 +25,7 @@ glm::vec3 deltaLocation= glm::vec3(0);
 glm::vec3 deltaWorldRotate= glm::vec3(0);
 glm::vec3 deltaRotate = glm::vec3(0);
 bool check = false;
+bool showNorm = false;
 
 glm::vec4 clearColor = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
 
@@ -99,8 +100,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("Rotate World Y", &worldRotate.y, 0, 0, 2); ImGui::SameLine(440);
 		ImGui::InputFloat("Rotate World Z", &worldRotate.z, 0, 0, 2);
 		ImGui::Checkbox("box", &check);
+		ImGui::Checkbox("box", &showNorm);
 			
 		if (scene.GetModelCount() > 0) {
+			scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
 			scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
 			if (scale != deltaScale || rotate != deltaRotate || location !=deltaLocation || worldRotate!=deltaWorldRotate) {
 				scene.GetModel(scene.GetActiveModelIndex())->changeScale(scale);
