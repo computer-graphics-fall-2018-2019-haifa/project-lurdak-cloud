@@ -7,7 +7,7 @@ Scene::Scene() :
 	activeCameraIndex(0),
 	activeModelIndex(0)
 {
-	cameras.push_back(Camera(  glm::vec4(500, 500, 50,1),   glm::vec4(0, 0, 0,1),   glm::vec4(0, 1, 0,1)));
+	cameras.push_back(Camera(  glm::vec4(800, 500, 50,1),   glm::vec4(0, 0, 0,1),   glm::vec4(0, 1, 0,1)));
 
 
 }

@@ -13,8 +13,11 @@ Camera::Camera(const glm::vec4& eye, const glm::vec4& at, const glm::vec4& up) :
 	
  
 {
+	cameraModel.setWorldLocation(eye);
 	SetCameraLookAt(eye, at, up);
-	//SetPerspectiveProjection(90, 100, 100, 500);
+	
+
+	SetPerspectiveProjection(90, 100, 100, 500);
 }
 
 Camera::~Camera()
@@ -28,17 +31,22 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
 	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
 
-	glm::mat4 translationOrientation = {
-	   glm::vec4(xaxis.x, yaxis.x, zaxis.x, 0),
-	   glm::vec4(xaxis.y, yaxis.y, zaxis.y, 0),
-	   glm::vec4(xaxis.z, yaxis.z, zaxis.z, 0),
-	   glm::vec4(glm::dot(xaxis,-eye)  ,glm::dot(yaxis,-eye),glm::dot(zaxis,-eye) , 1)
-	};//matrix for orientation Camera and translation Camera
-
-
+	glm::mat4 orientation = {
+	   glm::vec4(xaxis.x * 180 / M_PI, yaxis.x * 180 / M_PI, zaxis.x * 180 / M_PI, 0),
+	   glm::vec4(xaxis.y * 180 / M_PI, yaxis.y * 180 / M_PI, zaxis.y * 180 / M_PI, 0),
+	   glm::vec4(xaxis.z * 180 / M_PI, yaxis.z * 180 / M_PI, zaxis.z * 180 / M_PI, 0),
+	   glm::vec4(0,       0,       0,     1)
+	};//matrix for orientation Camera
+	cameraModel.setSelfRotate(Utils::matrixMulti(cameraModel.getCenter(), orientation ));
 	 
- 
-	this->viewTransformation = translationOrientation;
+	glm::mat4 translation = {
+		glm::vec4(1,      0,      0,   0),
+		glm::vec4(0,      1,      0,   0),
+		glm::vec4(0,      0,      1,   0),
+		glm::vec4(-eye.x, -eye.y, -eye.z, 1)
+	};//matrix for translation Camera
+
+	this->viewTransformation = translation * orientation;
 
 
 }
@@ -47,6 +55,9 @@ glm::mat4x4 Camera::GetCamViewTrans() {
 }
 glm::mat4x4 Camera::GetCamProjTrans() {
 	return this->projectionTransformation;
+}
+MeshModel Camera::getCamModel() {
+	return this->cameraModel;
 }
 float Camera::GetCamZoom() {
 	return this->zoom;

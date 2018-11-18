@@ -41,5 +41,6 @@ public:
 	void DrawFaceLines(glm::vec3 v1, glm::vec3 v2, glm::vec3 v3, const glm::vec3 color, Camera selectedCam);
 	void DrawBox(std::vector<glm::vec3> box, const glm::vec3 color);
 	void Renderer::ScaledAndTransformedModels(const Scene& scene);
+	void  TransformedCamera(const Scene& scene);
 	// Add more methods/functionality as needed...
 };

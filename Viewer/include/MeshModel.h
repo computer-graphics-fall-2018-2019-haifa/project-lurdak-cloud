@@ -46,7 +46,7 @@ public:
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
 	 
-	const std::vector<glm::vec3> GetFixedVertices(const glm::mat4x4 cameraView);
+	const std::vector<glm::vec3> GetFixedVertices( );
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
 	const std::vector<glm::vec3>  GetVertices();
@@ -62,6 +62,6 @@ public:
 	void setSelfRotate(const glm::vec3 rotate);
 	
 	void ChangeShowBox(bool check);
-	void FixVert(const glm::mat4x4 cameraView);
+	void FixVert();
 	// Add more methods/functionality as needed...
 };

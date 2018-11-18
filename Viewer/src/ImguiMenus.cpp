@@ -100,11 +100,11 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("Rotate World Y", &worldRotate.y, 0, 0, 2); ImGui::SameLine(440);
 		ImGui::InputFloat("Rotate World Z", &worldRotate.z, 0, 0, 2);
 		ImGui::Checkbox("box", &check);
-		ImGui::Checkbox("box", &showNorm);
+		//ImGui::Checkbox("box", &showNorm);
 			
 		if (scene.GetModelCount() > 0) {
 			scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
-			scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
+			//scene.GetModel(scene.GetActiveModelIndex())->ChangeShowBox(check);
 			if (scale != deltaScale || rotate != deltaRotate || location !=deltaLocation || worldRotate!=deltaWorldRotate) {
 				scene.GetModel(scene.GetActiveModelIndex())->changeScale(scale);
 				scene.GetModel(scene.GetActiveModelIndex())->setSelfRotate(rotate);

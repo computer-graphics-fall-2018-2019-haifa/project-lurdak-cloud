@@ -40,6 +40,7 @@ public:
 		const float far);
 
 	void SetZoom(const float zoom);
+	MeshModel getCamModel();
 
 	// Add more methods/functionality as needed...
 };

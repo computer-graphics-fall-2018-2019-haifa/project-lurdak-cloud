@@ -148,12 +148,12 @@ void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::
 	//glm::vec3 camViewv2 = Utils::matrixMulti(v2, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
 	//glm::vec3 camViewv3 = Utils::matrixMulti(v3, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
 
-	int  x0 =  v1.x*selectedCam.GetCamZoom();
-	int y0 =  v1.y*selectedCam.GetCamZoom();
-	int x1 =  v2.x*selectedCam.GetCamZoom();
-	int y1 =  v2.y*selectedCam.GetCamZoom();
-	int x2 =  v3.x*selectedCam.GetCamZoom();
-	int y2 =  v3.y*selectedCam.GetCamZoom();;
+	int  x0 =  v1.x ;
+	int y0 =  v1.y ;
+	int x1 =  v2.x ;
+	int y1 =  v2.y ;
+	int x2 =  v3.x ;
+	int y2 =  v3.y ;
 
 	DrawBrenLineAlg(x0, y0, x1, y1,color);
 	DrawBrenLineAlg(x1, y1, x2, y2, color);
@@ -196,20 +196,17 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 	if (scene.GetModelCount() > 0) {
 
 		for (int i = 0; i < scene.GetModelCount(); i++) {
-
-			MeshModel model = * scene.GetModel(i);
-			std::vector<glm::vec3> vertices = model.GetFixedVertices(scene.GetCamera(scene.GetActiveCameraIndex()).GetCamViewTrans());
-			std::vector<glm::vec3> box = model.getBox();
+ 
+			std::vector<glm::vec3> vertices = scene.GetModel(i)->GetFixedVertices( );
+			std::vector<glm::vec3> box = scene.GetModel(i)->getBox();
 	
 
 
 			
-			if (model.isShowBox()) {
+			if (scene.GetModel(i)->isShowBox()) {
 				DrawBox(box, glm::vec3(1, 0, 0));
 			}
-			auto facesInModel = model.GetFaces();
-
-			for (auto face : facesInModel)
+			for (auto face : scene.GetModel(i)->GetFaces())
 			{
 
 				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
@@ -227,6 +224,40 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 
 	}
 }
+void Renderer::TransformedCamera(const Scene& scene) {
+
+	if (scene.GetCameraCount() > 0) {
+
+		for (int i = 0; i < scene.GetCameraCount(); i++) {
+
+			MeshModel cam = scene.GetCamera(i).getCamModel();
+			std::vector<glm::vec3> vertices = cam.GetFixedVertices( );
+			std::vector<glm::vec3> box = cam.getBox();
+
+
+
+
+			if (cam.isShowBox()) {
+				DrawBox(box, glm::vec3(1, 0, 0));
+			}
+			auto facesInModel = cam.GetFaces();
+
+			for (auto face : facesInModel)
+			{
+
+				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
+				glm::vec3 v1 = vertices[face.GetVertexIndex(1) - 1];
+				glm::vec3 v2 = vertices[face.GetVertexIndex(2) - 1];
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0), scene.GetCamera(scene.GetActiveCameraIndex()));
+			}
+
+
+		}
+
+
+
+	}
+}
 void Renderer::Render(const Scene& scene)
 {
 	//#############################################
@@ -236,7 +267,8 @@ void Renderer::Render(const Scene& scene)
 
 	// Draw a chess board in the middle of the screen
 	
-	ScaledAndTransformedModels(scene);
+	//ScaledAndTransformedModels(scene);
+	TransformedCamera(scene);
 	
 	
  
