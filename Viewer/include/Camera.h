@@ -16,12 +16,15 @@ class Camera
 private:
 	glm::mat4x4 viewTransformation;
 	glm::mat4x4 projectionTransformation;
+	MeshModel cameraModel;
 	float zoom;
 
 public:
 	Camera(const glm::vec4& eye, const glm::vec4& at, const glm::vec4& up);
 	~Camera();
-
+	glm::mat4x4 GetCamViewTrans();
+	glm::mat4x4 GetCamProjTrans();
+	float GetCamZoom();
 	void SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const glm::vec3& up);
 
 	void SetOrthographicProjection(

@@ -35,6 +35,7 @@ public:
 	void SetActiveModelIndex(int index);
 	const int GetActiveModelIndex() const;
 	 MeshModel * GetModel(int index) const;
+	 Camera  GetCamera(int index) const;
 
 	// Add more methods as needed...
 };

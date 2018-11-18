@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include "Camera.h"
 MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::string& modelName) :
 	modelName(modelName),
 	worldTransform(Utils::TranslateMatrix(glm::vec3(400, 400, 400))),
@@ -51,6 +51,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
 	this->modelWorldRotate=(glm::vec3(0, 0, 0));
+	this->modelWorldLocation = (glm::vec3(0, 0, 0));
 	this->modelSelfRotate = (glm::vec3(0, 0, 0));
 	changeScale(glm::vec3(100, 100, 100));
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
@@ -62,10 +63,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints.push_back(glm::vec3(minX, minY, maxZ));
 	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
 	this->boxPoints2 = this->boxPoints;
-	showBox = false;
-	FixVert();
-	
-
+	showBox = false;	
 
 }
 
@@ -89,24 +87,31 @@ void MeshModel::SetColor(const glm::vec4& color)
 {
 	this->color = color;
 }
-void MeshModel::FixVert() {
-	this->FixedVer = this->vertices;
+
+void MeshModel::FixVert(const glm::mat4x4 cameraView) {
+	this->FixedVer =  this->vertices;
 	this->boxPoints = this->boxPoints2;
 	glm::mat4 myModelMatrix = Utils::TranslateMatrix(-this->center) *Utils::RotateMatrix(this->modelSelfRotate) * Utils::ScaleMatrix(this->modelScale);
 	glm::mat4 myGlobalMatrix = Utils::TranslateMatrix(this->modelWorldLocation)* Utils::RotateMatrix(this->modelWorldRotate);
 	for (int i = 0; i < this->FixedVer.size(); i++) {
 			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myModelMatrix);
 			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myGlobalMatrix);
+			
 
  
 	}
 	for (int i = 0; i < this->boxPoints.size(); i++) {
 		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myModelMatrix);
+ 
 		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myGlobalMatrix);
+	
 
  
 	}
 }
+/*void MeshModel::ApplyCam(Camera camera) {
+
+}*/
 
 
 
@@ -121,19 +126,19 @@ const glm::vec3  MeshModel::getWorldLocation() {
 }
 void  MeshModel::setWorldLocation(const glm::vec3 location) {
 	 this->modelWorldLocation =(location);
-	 FixVert();
+
 }
 void  MeshModel::setWorldRotation(const glm::vec3 rotate) {
 	this->modelWorldRotate = (rotate);
-	FixVert();
+
 }
 void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
 	this->modelSelfRotate = (rotate);
-	FixVert();
+
 }
 void MeshModel::changeScale(const glm::vec3 scale) {
 	this->modelScale = glm::vec3(scale.x, scale.y, scale.z);
-	FixVert();
+
 }
 const glm::vec4& MeshModel::GetColor() const
 {
@@ -152,8 +157,9 @@ const std::vector<glm::vec3> MeshModel::GetVertices()
 {
 	return this->vertices;
 }
-const std::vector<glm::vec3> MeshModel::GetFixedVertices()
+const std::vector<glm::vec3> MeshModel::GetFixedVertices(const glm::mat4x4 cameraView)
 {
+	this->FixVert(cameraView);
 	return this->FixedVer;
 }
 

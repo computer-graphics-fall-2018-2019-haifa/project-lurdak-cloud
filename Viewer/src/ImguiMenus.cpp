@@ -16,11 +16,11 @@
 
 bool showDemoWindow = false;
 bool showAnotherWindow = false;
-glm::vec3 scale=glm::vec3(100);
-glm::vec3 location= glm::vec3(400);
+glm::vec3 scale=glm::vec3(10);
+glm::vec3 location= glm::vec3(0);
 glm::vec3 rotate=glm::vec3(0);
 glm::vec3 worldRotate = glm::vec3(0);
-glm::vec3 deltaScale= glm::vec3(100);
+glm::vec3 deltaScale= glm::vec3(10);
 glm::vec3 deltaLocation= glm::vec3(0);
 glm::vec3 deltaWorldRotate= glm::vec3(0);
 glm::vec3 deltaRotate = glm::vec3(0);

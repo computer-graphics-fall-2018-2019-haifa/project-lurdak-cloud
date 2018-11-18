@@ -79,7 +79,7 @@ glm::vec3 Utils::matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat)
 	float z = mat[2][0] * vertic.x + mat[2][1] * vertic.y + mat[2][2] * vertic.z + mat[2][3] * 1;
 	float w = mat[3][0] * vertic.x + mat[3][1] * vertic.y + mat[3][2] * vertic.z + mat[3][3] * 1;
 
-	return glm::vec3(x/w, y / w, z / w);
+	return glm::vec3(x/w, y/w , z /w);
 }
 glm::vec2 Utils::d2vd3(const glm::vec3 vertic)
 {
@@ -139,6 +139,30 @@ glm::mat4x4  Utils::TranslateMatrix(const glm::vec3 translate) {
 		, 0, 1.0f, 0, translate.y
 		, 0, 0, 1.0f, translate.z
 		, 0, 0, 0, 1.0f);
+
+
+}
+glm::mat4x4  Utils::PerspectiveProjectionMatrix
+(
+	const float fovy,
+	const float aspectRatio,
+	const float near,
+	const float far)
+{
+	float presAngel = (1 / ((float)tan((fovy*M_PI) / 360.0f)));
+	return glm::mat4x4(presAngel, 0, 0, 0,
+		0, presAngel, 0, 0,
+		0, 0, far / (near - far), -1,
+		0, 0, far*near / (near - far), 0);
+}
+glm::mat4x4  Utils::OrthographicProjectionMatrix(const float height,
+	const float aspectRatio,
+	const float near,
+	const float far) {
+	return glm::mat4x4(2 / (aspectRatio * height), 0, 0, 0
+		, 0, 2 / height, 0, 0
+		, 0, 0, 2 / (near - far)
+		, 0, 0, 0, 0, 1);
 
 
 }

@@ -32,7 +32,7 @@ private:
 	glm::vec3 modelTranslate;
 	glm::vec3 modelScale;
 	std::vector<glm::vec3>  FixedVer;//save the vertices after multi with transfor matrixes
-	void FixVert();
+	
 
 
 
@@ -46,7 +46,7 @@ public:
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
 	 
-	const std::vector<glm::vec3> GetFixedVertices();
+	const std::vector<glm::vec3> GetFixedVertices(const glm::mat4x4 cameraView);
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
 	const std::vector<glm::vec3>  GetVertices();
@@ -59,8 +59,9 @@ public:
 	const glm::vec3   getWorldLocation();
 	void setWorldLocation(const glm::vec3 location);
 	void setWorldRotation(const glm::vec3 rotate);
-	void 	setSelfRotate(const glm::vec3 rotate);
+	void setSelfRotate(const glm::vec3 rotate);
+	
 	void ChangeShowBox(bool check);
-
+	void FixVert(const glm::mat4x4 cameraView);
 	// Add more methods/functionality as needed...
 };

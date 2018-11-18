@@ -18,7 +18,10 @@ public:
 	static glm::mat4x4 RotateYMatrix(float angel);
 	static glm::mat4x4 TranslateMatrix(const glm::vec3 vertic);
 	static glm::mat4x4 ScaleMatrix(const glm::vec3 vertic);
-	static glm::mat4x4   RotateMatrix(glm::vec3 rotate);
+	static glm::mat4x4 RotateMatrix(glm::vec3 rotate);
+	static glm::mat4x4 OrthographicProjectionMatrix(const float height,	const float aspectRatio,const float near,const float far);
+	static glm::mat4x4  PerspectiveProjectionMatrix	(const float fovy,const float aspectRatio,const float near,	const float far);
+
 
 	static glm::vec2 d2vd3(const glm::vec3 vertic);
 	static glm::mat4x4  UniformScaleMatrix(const float scale);

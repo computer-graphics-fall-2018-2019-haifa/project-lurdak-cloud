@@ -143,13 +143,17 @@ void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& 
 
 
 }
-void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
-	int  x0 = v1.x; 
-	int y0 = v1.y; 
-	int x1 = v2.x; 
-	int y1 = v2.y; 
-	int x2 = v3.x; 
-	int y2 = v3.y;; 
+void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color, Camera selectedCam) {
+	//glm::vec3 camViewv1 = Utils::matrixMulti(v1, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
+	//glm::vec3 camViewv2 = Utils::matrixMulti(v2, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
+	//glm::vec3 camViewv3 = Utils::matrixMulti(v3, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
+
+	int  x0 =  v1.x*selectedCam.GetCamZoom();
+	int y0 =  v1.y*selectedCam.GetCamZoom();
+	int x1 =  v2.x*selectedCam.GetCamZoom();
+	int y1 =  v2.y*selectedCam.GetCamZoom();
+	int x2 =  v3.x*selectedCam.GetCamZoom();
+	int y2 =  v3.y*selectedCam.GetCamZoom();;
 
 	DrawBrenLineAlg(x0, y0, x1, y1,color);
 	DrawBrenLineAlg(x1, y1, x2, y2, color);
@@ -194,7 +198,7 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 		for (int i = 0; i < scene.GetModelCount(); i++) {
 
 			MeshModel model = * scene.GetModel(i);
-			std::vector<glm::vec3> vertices = model.GetFixedVertices();
+			std::vector<glm::vec3> vertices = model.GetFixedVertices(scene.GetCamera(scene.GetActiveCameraIndex()).GetCamViewTrans());
 			std::vector<glm::vec3> box = model.getBox();
 	
 
@@ -211,7 +215,7 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
 				glm::vec3 v1 = vertices[face.GetVertexIndex(1) - 1];
 				glm::vec3 v2 = vertices[face.GetVertexIndex(2) - 1];
-				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0));
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0),scene.GetCamera(scene.GetActiveCameraIndex()));
 
 
 			}
