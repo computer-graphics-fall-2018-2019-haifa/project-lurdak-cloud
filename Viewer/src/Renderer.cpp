@@ -118,6 +118,7 @@ void Renderer::plotLineHight(int x0, int y0, int x1, int y1, const glm::vec3& co
 		slopError += 2 * deltax;
 	}
 }
+ 
 void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& color) {
 	float deltax = abs(x1- x0);
 	float deltay = abs(y1 - y0);
@@ -143,7 +144,7 @@ void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& 
 
 
 }
-void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color, Camera selectedCam) {
+void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
 	//glm::vec3 camViewv1 = Utils::matrixMulti(v1, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
 	//glm::vec3 camViewv2 = Utils::matrixMulti(v2, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
 	//glm::vec3 camViewv3 = Utils::matrixMulti(v3, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
@@ -192,27 +193,28 @@ void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
 }
 */
 void Renderer::ScaledAndTransformedModels(const Scene& scene) {
-	
+ 
 	if (scene.GetModelCount() > 0) {
 
 		for (int i = 0; i < scene.GetModelCount(); i++) {
- 
-			std::vector<glm::vec3> vertices = scene.GetModel(i)->GetFixedVertices( );
-			std::vector<glm::vec3> box = scene.GetModel(i)->getBox();
+			MeshModel model = *scene.GetModel(i);
+	
+			std::vector<glm::vec3> vertices = model.GetFixedVertices( );
+			std::vector<glm::vec3> box = model.getBox();
 	
 
 
 			
-			if (scene.GetModel(i)->isShowBox()) {
+			if (model.isShowBox()) {
 				DrawBox(box, glm::vec3(1, 0, 0));
 			}
-			for (auto face : scene.GetModel(i)->GetFaces())
+			for (auto face : model.GetFaces())
 			{
 
 				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
 				glm::vec3 v1 = vertices[face.GetVertexIndex(1) - 1];
 				glm::vec3 v2 = vertices[face.GetVertexIndex(2) - 1];
-				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0),scene.GetCamera(scene.GetActiveCameraIndex()));
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0));
 
 
 			}
@@ -248,7 +250,7 @@ void Renderer::TransformedCamera(const Scene& scene) {
 				glm::vec3 v0 = vertices[face.GetVertexIndex(0) - 1];
 				glm::vec3 v1 = vertices[face.GetVertexIndex(1) - 1];
 				glm::vec3 v2 = vertices[face.GetVertexIndex(2) - 1];
-				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0), scene.GetCamera(scene.GetActiveCameraIndex()));
+				DrawFaceLines(v0, v1, v2, glm::vec3(0, 1, 0) );
 			}
 
 
@@ -267,8 +269,8 @@ void Renderer::Render(const Scene& scene)
 
 	// Draw a chess board in the middle of the screen
 	
-	//ScaledAndTransformedModels(scene);
-	TransformedCamera(scene);
+	ScaledAndTransformedModels(scene);
+	//TransformedCamera(scene);
 	
 	
  
