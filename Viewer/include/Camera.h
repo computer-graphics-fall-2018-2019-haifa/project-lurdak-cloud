@@ -35,7 +35,7 @@ public:
  
 	 
 	void SetZoom(const float zoom);
-	MeshModel  GetCameraModel();
+	MeshModel     GetCameraModel();
 	void projectCamera(int width, int hight, int far, int near);
 	glm::vec3 getEye();
 	// Add more methods/functionality as needed...

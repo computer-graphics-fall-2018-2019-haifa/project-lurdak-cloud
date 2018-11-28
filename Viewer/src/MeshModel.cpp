@@ -101,7 +101,7 @@ void MeshModel::applyScaleAndRotate() {
 	}
 	this->boxPoints2 = this->boxPoints;
 	for (int j = 0; j < this->boxPoints2.size(); j++) {
-		this->boxPoints2[j] = Utils::matrixMulti(this->boxPoints2[j], Utils::TranslateMatrix(-this->center));
+		this->boxPoints2[j] = Utils::matrixMulti(this->boxPoints2[j], this->selfTransform);
 	 
 	}
 

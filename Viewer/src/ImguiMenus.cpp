@@ -141,7 +141,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("Rotate  Z", &camRotate.z, 0, 0, 2);
 
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
-		scene.GetCamera(0).moveCame( camLocation );
+		scene.GetCamera(scene.GetActiveCameraIndex()).moveCame( camLocation );
 		if (ImGui::Button("Close Me"))
 		{
 			showCameraControl = false;
