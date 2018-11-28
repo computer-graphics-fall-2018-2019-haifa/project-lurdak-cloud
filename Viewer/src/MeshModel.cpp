@@ -6,9 +6,18 @@
 #include <fstream>
 #include <sstream>
 
+
 MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3>& vertices, const std::vector<glm::vec3>& normals, const std::string& modelName) :
 	modelName(modelName),
-	worldTransform(Utils::TranslateMatrix(glm::vec3(400, 400, 400))),
+ 
+	worldTransform(1,0,0,0,
+		0,1,0,0,
+		0,0,1,0,
+		0,0,0,1),
+	selfTransform(1, 0, 0, 0,
+		0, 1, 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1),
 	vertices(vertices),
 	faces(faces),
 	normals(normals)
@@ -50,10 +59,8 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	}
 
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
-	this->modelWorldRotate=(glm::vec3(0, 0, 0));
-	this->modelWorldLocation = (glm::vec3(0, 0, 0));
 	this->modelSelfRotate = (glm::vec3(0, 0, 0));
-	changeScale(glm::vec3(100, 100, 100));
+	changeScale(glm::vec3(10, 10, 10));
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
 	this->boxPoints.push_back(glm::vec3(maxX, minY, minZ));
 	this->boxPoints.push_back(glm::vec3(minX, minY, minZ));
@@ -64,10 +71,12 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	this->boxPoints.push_back(glm::vec3(minX, maxY, maxZ));
 	this->boxPoints2 = this->boxPoints;
 	showBox = false;
-	FixVert();
-	
-
-
+	if (center.x != 0 || center.y != 0 || center.z !=0) {
+		centerTheModel();
+		center.x = 0;
+		center.y = 0;
+		center.z = 0;
+	}
 }
 
 MeshModel::~MeshModel()
@@ -80,34 +89,49 @@ void MeshModel::SetWorldTransformation(const glm::mat4x4& worldTransform)
 {
 	this->worldTransform = worldTransform;
 }
+void MeshModel::SetWorldTransformation(const glm::vec3 location,const glm::vec3 rotate)
+{
+	this->worldTransform = Utils::RotateMatrix(rotate)*Utils::TranslateMatrix(location);
+}
+void MeshModel::applyScaleAndRotate() {
+	this->scaledAndRotatedvertices = this->vertices;
+	for (int j = 0; j < this->scaledAndRotatedvertices.size(); j++) {
+		this->scaledAndRotatedvertices[j] = Utils::matrixMulti(this->scaledAndRotatedvertices[j], this->selfTransform);
+		 
+	}
+	this->boxPoints2 = this->boxPoints;
+	for (int j = 0; j < this->boxPoints2.size(); j++) {
+		this->boxPoints2[j] = Utils::matrixMulti(this->boxPoints2[j], Utils::TranslateMatrix(-this->center));
+	 
+	}
 
+}
+
+void MeshModel::centerTheModel()
+{
+	for (int j = 0; j < this->vertices.size(); j++) {
+		this->vertices[j] = Utils::matrixMulti(this->vertices[j], Utils::TranslateMatrix(-this->center));
+		//vertices[j] = Utils::matrixMulti(vertices[j], worldToCamera);
+	}
+	for (int j = 0; j < this->boxPoints.size(); j++) {
+		this->boxPoints[j] = Utils::matrixMulti(this->boxPoints[j], Utils::TranslateMatrix(-this->center));
+		//vertices[j] = Utils::matrixMulti(vertices[j], worldToCamera);
+	}
+}
 const glm::mat4x4& MeshModel::GetWorldTransformation() const
 {
-	return worldTransform;
+	return this->worldTransform;
+}
+const glm::mat4x4& MeshModel::GetSelfTransformation() const
+{
+	return this->selfTransform;
 }
 
 void MeshModel::SetColor(const glm::vec4& color)
 {
 	this->color = color;
 }
-void MeshModel::FixVert() {
-	this->FixedVer = this->vertices;
-	this->boxPoints = this->boxPoints2;
-	glm::mat4 myModelMatrix = Utils::TranslateMatrix(-this->center) *Utils::RotateMatrix(this->modelSelfRotate) * Utils::ScaleMatrix(this->modelScale);
-	glm::mat4 myGlobalMatrix = Utils::TranslateMatrix(this->modelWorldLocation)* Utils::RotateMatrix(this->modelWorldRotate);
-	for (int i = 0; i < this->FixedVer.size(); i++) {
-			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myModelMatrix);
-			this->FixedVer[i] = Utils::matrixMulti(FixedVer[i], myGlobalMatrix);
-
  
-	}
-	for (int i = 0; i < this->boxPoints.size(); i++) {
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myModelMatrix);
-		this->boxPoints[i] = Utils::matrixMulti(boxPoints[i], myGlobalMatrix);
-
- 
-	}
-}
 
 
 
@@ -117,24 +141,30 @@ const glm::vec3  MeshModel::getScale() {
 const glm::vec3  MeshModel::getSelfRotate() {
 	return this->modelSelfRotate;
 }
-const glm::vec3  MeshModel::getWorldLocation() {
-	return this->modelWorldLocation;
-}
+ 
 void  MeshModel::setWorldLocation(const glm::vec3 location) {
-	 this->modelWorldLocation =(location);
-	 FixVert();
+	this->worldTransform[0][3] = location.x;
+	this->worldTransform[1][3] = location.y;
+	this->worldTransform[2][3] = location.z;
+	 
+ 
 }
 void  MeshModel::setWorldRotation(const glm::vec3 rotate) {
-	this->modelWorldRotate = (rotate);
-	FixVert();
+	 
+	this->worldTransform = Utils::RotateMatrix(rotate) *this->worldTransform;
+ 
+	 
 }
 void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
 	this->modelSelfRotate = (rotate);
-	FixVert();
+	this->selfTransform= Utils::RotateMatrix(this->modelSelfRotate)   * Utils::ScaleMatrix(this->modelScale);
+	applyScaleAndRotate();
+ 
 }
 void MeshModel::changeScale(const glm::vec3 scale) {
 	this->modelScale = glm::vec3(scale.x, scale.y, scale.z);
-	FixVert();
+	this->selfTransform = Utils::RotateMatrix(this->modelSelfRotate)   * Utils::ScaleMatrix(this->modelScale);
+	applyScaleAndRotate();
 }
 const glm::vec4& MeshModel::GetColor() const
 {
@@ -149,14 +179,15 @@ void MeshModel::SetModelName(const std::string name)
 {
 	this->modelName = name;
 } 
-const std::vector<glm::vec3> MeshModel::GetVertices()
+const std::vector<glm::vec3> MeshModel::GetOriginalVertices()
 {
 	return this->vertices;
 }
-const std::vector<glm::vec3> MeshModel::GetFixedVertices()
+const std::vector<glm::vec3> MeshModel::GetVertices()
 {
-	return this->FixedVer;
+	return this->scaledAndRotatedvertices;
 }
+ 
 
 
 const std::vector<Face> MeshModel::GetFaces()
@@ -164,7 +195,7 @@ const std::vector<Face> MeshModel::GetFaces()
 	return this->faces;
 }
 const std::vector<glm::vec3> MeshModel::getBox() {
-	return  this->boxPoints;
+	return  this->boxPoints2;
 }
 void MeshModel::ChangeShowBox(bool check) {
 	this->showBox = check;
@@ -174,4 +205,25 @@ const bool MeshModel::isShowBox() {
 }
 const glm::vec3 MeshModel::getCenter() {
 	return  this->center;
-}
+}/*
+void MeshModel::lookAt( const glm::vec3& at, const glm::vec3& up)
+{
+ 
+	glm::vec3 zaxis = glm::normalize(this->getWorldLocation() - at);
+	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
+	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
+
+	
+
+
+
+
+	this->worldTransform = {
+	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , 0),
+	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0),
+	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , 0),
+	   glm::vec4(glm::dot(xaxis,-this->getWorldLocation()), glm::dot(yaxis, -this->getWorldLocation()), glm::dot(zaxis, -this->getWorldLocation()),  1)
+	};
+
+	
+}*/

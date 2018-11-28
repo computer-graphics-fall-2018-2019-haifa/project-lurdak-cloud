@@ -6,7 +6,6 @@
 #include <fstream>
 #include <sstream>
 
-
 glm::vec3 Utils::Vec3fFromStream(std::istream& issLine)
 {
 	float x, y, z;
@@ -71,15 +70,18 @@ MeshModel Utils::LoadMeshModel(const std::string& filePath)
 
 	return MeshModel(faces, vertices, normals, Utils::GetFileName(filePath));
 }
+
 //uti help in matrix multi , get a vertic and matrix and return the new vertic
-glm::vec3 Utils::matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat) 
-{	
-	float x = mat[0][0]*vertic.x+mat[0][1]*vertic.y+mat[0][2]*vertic.z+mat[0][3]*1 ;
+glm::vec3 Utils::matrixMulti(const glm::vec3 vertic, const glm::mat4x4 mat)
+{
+	float x = mat[0][0] * vertic.x + mat[0][1] * vertic.y + mat[0][2] * vertic.z + mat[0][3] * 1;
 	float y = mat[1][0] * vertic.x + mat[1][1] * vertic.y + mat[1][2] * vertic.z + mat[1][3] * 1;
 	float z = mat[2][0] * vertic.x + mat[2][1] * vertic.y + mat[2][2] * vertic.z + mat[2][3] * 1;
 	float w = mat[3][0] * vertic.x + mat[3][1] * vertic.y + mat[3][2] * vertic.z + mat[3][3] * 1;
-
-	return glm::vec3(x/w, y/w , z /w);
+ 
+	
+	return glm::vec3(x / w, y / w, z / w);
+	 
 }
 glm::vec2 Utils::d2vd3(const glm::vec3 vertic)
 {
@@ -149,20 +151,49 @@ glm::mat4x4  Utils::PerspectiveProjectionMatrix
 	const float near,
 	const float far)
 {
+ 
+ 
 	float presAngel = (1 / ((float)tan((fovy*M_PI) / 360.0f)));
-	return glm::mat4x4(presAngel, 0, 0, 0,
+	return glm::mat4x4(aspectRatio* presAngel, 0, 0, 0,
 		0, presAngel, 0, 0,
-		0, 0, far / (near - far), -1,
-		0, 0, far*near / (near - far), 0);
+		0, 0,near+ far / (near - far), 2 * far*near / (near - far),
+		0, 0, -1, 0);
 }
-glm::mat4x4  Utils::OrthographicProjectionMatrix(const float height,
-	const float aspectRatio,
+glm::mat4x4  Utils::PerspectiveProjectionMatrix
+(
+	const float right,
+	const float left,
+	const float top,
+	const float bot,
 	const float near,
-	const float far) {
-	return glm::mat4x4(2 / (aspectRatio * height), 0, 0, 0
-		, 0, 2 / height, 0, 0
-		, 0, 0, 2 / (near - far)
-		, 0, 0, 0, 0, 1);
+	const float far )
+{
+
+
+	float width = right - left;
+	float height = top - bot;
+	float depth = far - near;
+	return glm::mat4x4(2*near / width, 0,   (left + right) / width,0
+		, 0, 2*near / height,  (top + bot) / height, 0
+		, 0, 0, -(far + near) / depth, (-2 *near*far)/ depth
+		,
+		0, 0,-1, 0);
+}
+
+glm::mat4x4  Utils::OrthographicProjectionMatrix(const float right,
+	const float left,
+	const float top,
+	const float bot,
+	const float far,
+	const float near) {
+	float width = right - left;
+	float height = top - bot;
+	float depth = far - near;
+	return glm::mat4x4(2 / width, 0, 0, -(left+right)/width
+		, 0, 2 / height, 0, -(top+bot)/height
+		, 0, 0, -2 / depth, -(far+near)/depth
+		, 
+		0, 0, 0, 1);
 
 
 }

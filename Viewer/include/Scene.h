@@ -7,7 +7,7 @@
 #include <memory>
 #include "MeshModel.h"
 #include "Camera.h"
-
+ 
 /*
  * Scene class.
  * This class holds all the scene information (models, cameras, lights, etc..)
@@ -15,12 +15,14 @@
 class Scene {
 private:
 	std::vector<std::shared_ptr<MeshModel>> models;
+	
 	std::vector<Camera> cameras;
 
 	int activeCameraIndex;
 	int activeModelIndex;
 
 public:
+ 
 	Scene();
 
 	void AddModel(const std::shared_ptr<MeshModel>& model);
