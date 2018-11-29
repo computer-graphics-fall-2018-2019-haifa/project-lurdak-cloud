@@ -8,7 +8,7 @@ Scene::Scene() :
 	activeModelIndex(0)
 {
  
-	AddCamera(std::make_shared<Camera>(glm::vec4(-600, -350, -100, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
+	AddCamera(std::make_shared<Camera>(glm::vec4(500, 600, 500, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
 
 
 }

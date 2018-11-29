@@ -135,6 +135,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::PushItemWidth(50);
 		 
 		deltaCamLocation = camLocation;
+		deltaCamRotation = camRotate;
 		ImGui::InputFloat("Camera X", &camLocation.x, 0, 0, 2); ImGui::SameLine(140);
 		ImGui::InputFloat("Camera y", &camLocation.y, 0, 0, 2); ImGui::SameLine(280);
 		ImGui::InputFloat("Camera Z", &camLocation.z, 0, 0, 2);
@@ -145,7 +146,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
 		if (camLocation != deltaCamLocation  ) {
-			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation,glm::vec3(0,0,0),glm::vec3(0,1,0));
+		}
+		if (camRotate != deltaCamRotation) {
+			scene.GetCamera(scene.GetActiveCameraIndex())->moveCame(camLocation);
 		}
 		if (ImGui::Button("Close Me"))
 		{

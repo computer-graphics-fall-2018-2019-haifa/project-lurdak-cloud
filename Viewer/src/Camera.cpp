@@ -34,7 +34,7 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
 	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
 	
-	/*this->eye = eye;
+	this->eye = eye;
 	cameraModel.setWorldLocation(this->eye);
 	 
 	glm::mat4 orint= {
@@ -50,11 +50,12 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	/*this->viewTransformation = -this->cameraModel.GetWorldTransformation()*orint;
 		*/
 	this->cameraModel.SetWorldTransformation(glm::mat4{
-	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , -eye.x),
-	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , -eye.y),
-	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , -eye.z),
-	   glm::vec4(0,0,0,     1)
+	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , glm::dot(xaxis, eye)),
+	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  ,  glm::dot(yaxis, eye)),
+	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , glm::dot(zaxis, eye)),
+	   glm::vec4(0,0 ,0,     1)
 	});
+ 
 	this->viewTransformation = glm::inverse(this->cameraModel.GetWorldTransformation());
 	
 
@@ -62,8 +63,14 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 void Camera::moveCame(const glm::vec3& transfor)
 {
 
-	this->viewTransformation = this->viewTransformation*Utils::TranslateMatrix(transfor);
+	this->viewTransformation = Utils::TranslateMatrix(transfor);
 	 
+}
+void Camera::rotateCam(const glm::vec3& rotate)
+{
+
+	this->viewTransformation = Utils::RotateMatrix(rotate)*this->viewTransformation;
+
 }
 glm::mat4x4 Camera::GetCamViewTrans() {
 	return this->viewTransformation;

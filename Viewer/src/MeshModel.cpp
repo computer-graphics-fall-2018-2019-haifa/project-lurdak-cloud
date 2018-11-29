@@ -91,7 +91,7 @@ void MeshModel::SetWorldTransformation(const glm::mat4x4& worldTransform)
 }
 void MeshModel::SetWorldTransformation(const glm::vec3 location,const glm::vec3 rotate)
 {
-	this->worldTransform = Utils::RotateMatrix(rotate)*Utils::TranslateMatrix(location);
+	this->worldTransform = Utils::TranslateMatrix(location)*Utils::RotateMatrix(rotate);
 }
 void MeshModel::applyScaleAndRotate() {
 	this->scaledAndRotatedvertices = this->vertices;

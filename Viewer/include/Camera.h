@@ -38,5 +38,6 @@ public:
 	MeshModel     GetCameraModel();
 	void projectCamera(int width, int hight, int far, int near);
 	glm::vec3 getEye();
+	void  rotateCam(const glm::vec3& rotate);
 	// Add more methods/functionality as needed...
 };
