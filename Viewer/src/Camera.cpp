@@ -33,32 +33,36 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	glm::vec3 zaxis = glm::normalize(eye - at);    
 	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
 	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
-	this->eye = eye;
+	
+	/*this->eye = eye;
+	cameraModel.setWorldLocation(this->eye);
+	 
 	glm::mat4 orint= {
 	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , 0),
 	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0),
 	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , 0),
 	   glm::vec4(0,0,0,    1)
 	};
+	
 	this->cameraModel.SetWorldTransformation(this->cameraModel.GetWorldTransformation()*orint);
+	 
 	this->cameraModel.setSelfRotate(glm::vec3 (0, -180, 0));
-	this->viewTransformation = -this->cameraModel.GetWorldTransformation()*orint;
-		
-		/*{
-	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , 0),
-	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0),
-	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , 0),
-	   glm::vec4(-xaxis.x * eye.x - xaxis.y * eye.y - xaxis.z * eye.z,       -yaxis.x * eye.x - yaxis.y * eye.y - yaxis.z * eye.z,       -zaxis.x * eye.x - zaxis.y * eye.y - zaxis.z * eye.z,     1)
-	};*/
+	/*this->viewTransformation = -this->cameraModel.GetWorldTransformation()*orint;
+		*/
+	this->cameraModel.SetWorldTransformation(glm::mat4{
+	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , -eye.x),
+	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , -eye.y),
+	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , -eye.z),
+	   glm::vec4(0,0,0,     1)
+	});
+	this->viewTransformation = glm::inverse(this->cameraModel.GetWorldTransformation());
+	
 
 }
 void Camera::moveCame(const glm::vec3& transfor)
 {
-	this->eye = transfor;
-	this->cameraModel.SetWorldTransformation(this->cameraModel.GetWorldTransformation()*Utils::TranslateMatrix(transfor));
-	 
-	this->viewTransformation = -this->cameraModel.GetWorldTransformation();
 
+	this->viewTransformation = this->viewTransformation*Utils::TranslateMatrix(transfor);
 	 
 }
 glm::mat4x4 Camera::GetCamViewTrans() {

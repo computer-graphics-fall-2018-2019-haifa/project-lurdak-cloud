@@ -195,7 +195,7 @@ void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
 void Renderer::ScaledAndTransformedModels(const Scene& scene) {
  
 	if (scene.GetModelCount() > 0) {
-		Camera cam = scene.GetCamera(0);
+		Camera cam = *scene.GetCamera(0);
 
 		for (int i = 0; i < scene.GetModelCount(); i++) {
 			MeshModel model = *scene.GetModel(i);
@@ -248,16 +248,16 @@ void Renderer::ScaledAndTransformedCams(const Scene& scene) {
 		
 
 		for (int i = 0; i < scene.GetCameraCount(); i++) {
-			MeshModel model = scene.GetCamera(i).GetCameraModel();
+			MeshModel model = scene.GetCamera(i)->GetCameraModel();
 
 			std::vector<glm::vec3> vertices = model.GetVertices();
 
 
 
 			//model.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-			glm::mat4 tMat = model.GetWorldTransformation();
-		/*	glm::mat4 camTrans;
-			tMat = cam.GetCamProjTrans()*cam.GetCamViewTrans()*tMat;*/
+			glm::mat4 tMat =( model.GetWorldTransformation());
+	
+			//tMat = cam.GetCamProjTrans()*cam.GetCamViewTrans()*tMat;
 			for (int j = 0; j < vertices.size(); j++) {
 				vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 
@@ -346,7 +346,7 @@ void Renderer::Render(const Scene& scene)
 	vertices.push_back(glm::vec3(0, 0, 100));
 	 
 
-	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex()).GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex()).GetCamViewTrans();
+	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
 	for (int j = 0; j < vertices.size(); j++) {
 		vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 	}

@@ -29,6 +29,8 @@ glm::vec3 deltaScale= glm::vec3(10);
 glm::vec3 deltaLocation= glm::vec3(0);
 glm::vec3 deltaWorldRotate= glm::vec3(0);
 glm::vec3 deltaRotate = glm::vec3(0);
+glm::vec3 deltaCamLocation = glm::vec3(0);
+glm::vec3 deltaCamRotation = glm::vec3(0);
 bool check = false;
 bool showNorm = false;
 
@@ -75,6 +77,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		deltaLocation = location;
 		deltaRotate = rotate;
 		deltaWorldRotate = worldRotate;
+		
 		ImGui::InputFloat("Scale X", &scale.x,0,0,2); ImGui::SameLine(120);
 		 ImGui::InputFloat("Scale Y", &scale.y,0,0,2 ); ImGui::SameLine(240);
 		 ImGui::InputFloat("Scale Z", &scale.z ,0,0,2);   
@@ -131,7 +134,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		 
 		ImGui::PushItemWidth(50);
 		 
-	 
+		deltaCamLocation = camLocation;
 		ImGui::InputFloat("Camera X", &camLocation.x, 0, 0, 2); ImGui::SameLine(140);
 		ImGui::InputFloat("Camera y", &camLocation.y, 0, 0, 2); ImGui::SameLine(280);
 		ImGui::InputFloat("Camera Z", &camLocation.z, 0, 0, 2);
@@ -141,7 +144,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("Rotate  Z", &camRotate.z, 0, 0, 2);
 
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
-		scene.GetCamera(scene.GetActiveCameraIndex()).moveCame( camLocation );
+		if (camLocation != deltaCamLocation  ) {
+			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+		}
 		if (ImGui::Button("Close Me"))
 		{
 			showCameraControl = false;
@@ -206,7 +211,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				ImGui::Begin("Camera Matrix", &showViewMatrix);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 				ImGui::Text("Hello from another window!");
-				glm::mat4 modelMat = scene.GetCamera(0).GetCamViewTrans();
+				glm::mat4 modelMat = scene.GetCamera(0)->GetCamViewTrans();
 				ImGui::Text("0x %.1f", modelMat[0].x); ImGui::SameLine(120);
 				ImGui::Text("0y %.1f", modelMat[0].y); ImGui::SameLine(240);
 				ImGui::Text("0z %.1f", modelMat[0].z); ImGui::SameLine(360);
