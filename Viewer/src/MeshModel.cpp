@@ -95,9 +95,14 @@ void MeshModel::SetWorldTransformation(const glm::vec3 location,const glm::vec3 
 }
 void MeshModel::applyScaleAndRotate() {
 	this->scaledAndRotatedvertices = this->vertices;
+	this->scaledAndRotatenormals = this->normals;
 	for (int j = 0; j < this->scaledAndRotatedvertices.size(); j++) {
 		this->scaledAndRotatedvertices[j] = Utils::matrixMulti(this->scaledAndRotatedvertices[j], this->selfTransform);
 		 
+	}
+	for (int j = 0; j < this->scaledAndRotatenormals.size(); j++) {
+		this->scaledAndRotatenormals[j] = Utils::matrixMulti(this->scaledAndRotatenormals[j], this->selfTransform);
+
 	}
 	this->boxPoints2 = this->boxPoints;
 	for (int j = 0; j < this->boxPoints2.size(); j++) {
@@ -111,6 +116,10 @@ void MeshModel::centerTheModel()
 {
 	for (int j = 0; j < this->vertices.size(); j++) {
 		this->vertices[j] = Utils::matrixMulti(this->vertices[j], Utils::TranslateMatrix(-this->center));
+		//vertices[j] = Utils::matrixMulti(vertices[j], worldToCamera);
+	}
+	for (int j = 0; j < this->normals.size(); j++) {
+		this->normals[j] = Utils::matrixMulti(this->normals[j], Utils::TranslateMatrix(-this->center));
 		//vertices[j] = Utils::matrixMulti(vertices[j], worldToCamera);
 	}
 	for (int j = 0; j < this->boxPoints.size(); j++) {
@@ -187,6 +196,11 @@ const std::vector<glm::vec3> MeshModel::GetVertices()
 {
 	return this->scaledAndRotatedvertices;
 }
+const std::vector<glm::vec3> MeshModel::GetNomal()
+{
+	return this->scaledAndRotatenormals;
+}
+
  
 
 
@@ -205,25 +219,4 @@ const bool MeshModel::isShowBox() {
 }
 const glm::vec3 MeshModel::getCenter() {
 	return  this->center;
-}/*
-void MeshModel::lookAt( const glm::vec3& at, const glm::vec3& up)
-{
- 
-	glm::vec3 zaxis = glm::normalize(this->getWorldLocation() - at);
-	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
-	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
-
-	
-
-
-
-
-	this->worldTransform = {
-	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , 0),
-	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0),
-	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , 0),
-	   glm::vec4(glm::dot(xaxis,-this->getWorldLocation()), glm::dot(yaxis, -this->getWorldLocation()), glm::dot(zaxis, -this->getWorldLocation()),  1)
-	};
-
-	
-}*/
+} 

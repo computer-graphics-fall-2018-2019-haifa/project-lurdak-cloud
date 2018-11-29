@@ -145,9 +145,7 @@ void Renderer::DrawBrenLineAlg(int x0, int y0, int x1, int y1, const glm::vec3& 
 
 }
 void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 v3,const glm::vec3 color) {
-	//glm::vec3 camViewv1 = Utils::matrixMulti(v1, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
-	//glm::vec3 camViewv2 = Utils::matrixMulti(v2, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
-	//glm::vec3 camViewv3 = Utils::matrixMulti(v3, (selectedCam.GetCamViewTrans()*selectedCam.GetCamProjTrans()));
+ 
 
 	int  x0 =  v1.x ;
 	int y0 =  v1.y ;
@@ -163,6 +161,21 @@ void Renderer::DrawFaceLines(const glm::vec3 v1, const glm::vec3 v2, const glm::
 
 	
 }
+void Renderer::DrawNorma(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 color) {
+
+
+	int  x0 = v1.x;
+	int y0 = v1.y;
+	int x1 = v2.x;
+	int y1 = v2.y;
+
+
+	DrawBrenLineAlg(x0, y0, x1, y1, color);
+
+
+
+
+}
 void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
 	for (int i = 0; i < 3; i++) {
 		DrawBrenLineAlg(box[i].x, box[i].y, box[i + 1].x, box[i + 1].y,color);
@@ -177,21 +190,7 @@ void Renderer::DrawBox(std::vector<glm::vec3> box, const glm::vec3 color) {
 	DrawBrenLineAlg(box[5].x, box[5].y, box[1].x, box[1].y, color);
 	DrawBrenLineAlg(box[6].x, box[6].y, box[2].x, box[2].y, color);
 }
-/*void Renderer::DrawAxesInCenter(MeshModel model, const glm::vec3 color) {
-	for (int i = 0; i < 2; i++) {
-		DrawBrenLineAlg(model.getBox()[i].x, model.getBox()[i].y, model.getBox()[i + 1].x, model.getBox()[i + 1].y, color);
-	}
-	DrawBrenLineAlg(model.getBox()[3].x, model.getBox()[3].y, model.getBox()[0].x, model.getBox()[0].y, color);
-	for (int i = 4; i < 6; i++) {
-		DrawBrenLineAlg(model.getBox()[i].x, model.getBox()[i].y, model.getBox()[i + 1].x, model.getBox()[i + 1].y, color);
-	}
-	DrawBrenLineAlg(model.getBox()[4].x, model.getBox()[4].y, model.getBox()[7].x, model.getBox()[7].y, color);
-	DrawBrenLineAlg(model.getBox()[4].x, model.getBox()[4].y, model.getBox()[0].x, model.getBox()[0].y, color);
-	DrawBrenLineAlg(model.getBox()[3].x, model.getBox()[3].y, model.getBox()[7].x, model.getBox()[7].y, color);
-	DrawBrenLineAlg(model.getBox()[5].x, model.getBox()[5].y, model.getBox()[1].x, model.getBox()[1].y, color);
-	DrawBrenLineAlg(model.getBox()[6].x, model.getBox()[6].y, model.getBox()[2].x, model.getBox()[2].y, color);
-}
-*/
+ 
 void Renderer::ScaledAndTransformedModels(const Scene& scene) {
  
 	if (scene.GetModelCount() > 0) {
@@ -236,6 +235,67 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 
 			}
 			
+
+		}
+
+
+
+	}
+}
+
+void Renderer::ScaledAndTransformedNorm(const Scene& scene) {
+
+	if (scene.GetModelCount() > 0) {
+		Camera cam = *scene.GetCamera(scene.GetActiveCameraIndex());
+
+		for (int i = 0; i < scene.GetModelCount(); i++) {
+			MeshModel model = *scene.GetModel(i);
+
+			std::vector<glm::vec3> vertices = model.GetVertices();
+			std::vector<glm::vec3> norma = model.GetNomal();
+
+
+
+			//model.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+			glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
+
+
+			tMat = model.GetWorldTransformation() *tMat;
+			for (int j = 0; j < vertices.size(); j++) {
+				vertices[j] = Utils::matrixMulti(vertices[j], tMat);
+
+
+			}
+			for (int j = 0; j < norma.size(); j++) {
+				norma[j] = Utils::matrixMulti(norma[j], tMat);
+			
+
+			}
+			for (auto face : model.GetFaces())
+			{
+				glm::vec3 normaV; glm::vec3 faceV;
+				glm::vec3 v0 = norma[face.GetNormalIndex(0) - 1];
+				glm::vec3 v1 = norma[face.GetNormalIndex(1) - 1];
+				glm::vec3 v2 = norma[face.GetNormalIndex(2) - 1];
+				
+				  normaV.x = (v0.x + v1.x + v2.x) / 3;
+				  normaV.y = (v0.y + v1.y + v2.y) / 3;
+				  normaV.z = (v0.z + v1.z + v2.z) / 3;
+				  v0 = vertices[face.GetVertexIndex(0) - 1];
+				  v1 = vertices[face.GetVertexIndex(1) - 1];
+				  v2 = vertices[face.GetVertexIndex(2) - 1];
+				  faceV.x = (v0.x + v1.x + v2.x) / 3;
+				  faceV.y = (v0.y + v1.y + v2.y) / 3;
+				  faceV.z = (v0.z + v1.z + v2.z) / 3;
+
+				DrawNorma(faceV, normaV,   glm::vec3(1, 0, 0));
+
+
+			}
+			 
+ 
+			 
+
 
 		}
 
@@ -341,6 +401,7 @@ void Renderer::Render(const Scene& scene)
 	}*/
 	ScaledAndTransformedModels(scene);
 	ScaledAndTransformedCams(scene);
+	ScaledAndTransformedNorm(scene);
 	std::vector<glm::vec3> vertices;
 	vertices.push_back( glm::vec3(0, 0, 0));
 	vertices.push_back(glm::vec3(1000, 0, 0));

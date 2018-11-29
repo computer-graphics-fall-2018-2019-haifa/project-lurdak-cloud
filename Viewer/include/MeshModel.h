@@ -17,6 +17,7 @@ private:
 	std::vector<glm::vec3> normals;
 	glm::mat4x4 worldTransform;
 	glm::mat4x4 selfTransform;
+	std::vector<glm::vec3> scaledAndRotatenormals;
 	bool showBox;
  
 	
@@ -65,6 +66,7 @@ public:
 	void ChangeShowBox(bool check);
 	void applyScaleAndRotate();
 	const std::vector<glm::vec3> GetOriginalVertices();
+	const std::vector<glm::vec3> MeshModel::GetNomal();
 	//void  lookAt(const glm::vec3& at, const glm::vec3& up);
 	// Add more methods/functionality as needed...
 };
