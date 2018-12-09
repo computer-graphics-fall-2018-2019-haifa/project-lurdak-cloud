@@ -160,19 +160,19 @@ void  MeshModel::setWorldLocation(const glm::vec3 location) {
 }
 void  MeshModel::setWorldRotation(const glm::vec3 rotate) {
 	 
-	this->worldTransform = Utils::RotateMatrix(rotate) *this->worldTransform;
+	this->worldTransform = this->worldTransform*Utils::RotateMatrix(rotate) ;
  
 	 
 }
 void  MeshModel::setSelfRotate(const glm::vec3 rotate) {
 	this->modelSelfRotate = (rotate);
-	this->selfTransform= Utils::RotateMatrix(this->modelSelfRotate)   * Utils::ScaleMatrix(this->modelScale);
+	this->selfTransform= Utils::ScaleMatrix(this->modelScale)*Utils::RotateMatrix(this->modelSelfRotate)    ;
 	applyScaleAndRotate();
  
 }
 void MeshModel::changeScale(const glm::vec3 scale) {
 	this->modelScale = glm::vec3(scale.x, scale.y, scale.z);
-	this->selfTransform = Utils::RotateMatrix(this->modelSelfRotate)   * Utils::ScaleMatrix(this->modelScale);
+	this->selfTransform = Utils::ScaleMatrix(this->modelScale)* Utils::RotateMatrix(this->modelSelfRotate)   ;
 	applyScaleAndRotate();
 }
 const glm::vec4& MeshModel::GetColor() const

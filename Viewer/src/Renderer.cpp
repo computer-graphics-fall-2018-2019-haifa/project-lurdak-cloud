@@ -401,7 +401,7 @@ void Renderer::Render(const Scene& scene)
 	}*/
 	ScaledAndTransformedModels(scene);
 	ScaledAndTransformedCams(scene);
-	ScaledAndTransformedNorm(scene);
+	//ScaledAndTransformedNorm(scene);
 	std::vector<glm::vec3> vertices;
 	vertices.push_back( glm::vec3(0, 0, 0));
 	vertices.push_back(glm::vec3(1000, 0, 0));
@@ -409,7 +409,7 @@ void Renderer::Render(const Scene& scene)
 	vertices.push_back(glm::vec3(0, 0, 1000));
 	 
 	//scene.GetCamera(scene.GetActiveCameraIndex())->projectCamera(viewportWidth, viewportHeight,1000,501);
-	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
+	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans()*scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() ;
 	for (int j = 0; j < vertices.size(); j++) {
 		vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 	}

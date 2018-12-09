@@ -20,7 +20,7 @@ Camera::Camera(const glm::vec4& eye, const glm::vec4& at, const glm::vec4& up) :
   
 	SetCameraLookAt(this->eye, glm::vec3(at.x,at.y,at.z), glm::vec3(up.x,up.y,up.z));
 	//isOrth = false;
-	projectCamera(5, 5, 20, 1);
+	projectCamera(20, 20, 20, 1);
 }
 
 Camera::~Camera()
@@ -44,18 +44,25 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	   glm::vec4(0,0,0,    1)
 	};
 	
-	this->cameraModel.SetWorldTransformation(this->cameraModel.GetWorldTransformation()*orint);
+	//this->cameraModel.SetWorldTransformation(Utils::TranslateMatrix(glm::vec3(glm::dot(xaxis, eye), glm::dot(yaxis, eye),glm::dot(zaxis, eye)))*orint);
 	 
-	this->cameraModel.setSelfRotate(glm::vec3 (0, -180, 0));
+	/*this->cameraModel.setSelfRotate(glm::vec3 (0, -180, 0));
 	/*this->viewTransformation = -this->cameraModel.GetWorldTransformation()*orint;
-		*/
+		
 	this->cameraModel.SetWorldTransformation(glm::mat4{
 	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , glm::dot(xaxis, eye)),
 	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  ,  glm::dot(yaxis, eye)),
 	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , glm::dot(zaxis, eye)),
 	   glm::vec4(0,0 ,0,     1)
 	});
- 
+ */
+	this->cameraModel.SetWorldTransformation(Utils::matrixMulti(glm::vec3(0,0,0), glm::mat4{
+	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  ,0),
+	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0 ),
+	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z ,0),
+	   glm::vec4(glm::dot(xaxis, eye),glm::dot(yaxis, eye), glm::dot(zaxis, eye),     1)
+		});
+
 	this->viewTransformation = glm::inverse(this->cameraModel.GetWorldTransformation());
 	
 
@@ -108,10 +115,11 @@ void Camera::projectCamera(int width, int hight, int far, int near)
 
 
 
-	if (this->isOrth)
-		this->projectionTransformation = Utils::OrthographicProjectionMatrix(right, left, top, bot, far, near);
-	else
+	
+		if (this->isOrth)
 		this->projectionTransformation = Utils::PerspectiveProjectionMatrix(right, left, top, bot, far, near);
+		else
+			this->projectionTransformation = Utils::OrthographicProjectionMatrix(right, left, top, bot, far, near);
 }
 glm::vec3 Camera::getEye() {
 	return this->eye;
