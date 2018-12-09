@@ -204,10 +204,9 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 	
 			
 			//model.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-			glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
-
+			glm::mat4 tMat = model.GetWorldTransformation();
 		
-			tMat = model.GetWorldTransformation() *tMat;
+			tMat = cam.GetCamProjTrans()*cam.GetCamViewTrans()*tMat;
 			for(int j=0;j<vertices.size();j++){
 				vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 			 
@@ -307,11 +306,10 @@ void Renderer::ScaledAndTransformedCams(const Scene& scene) {
 
 	if (scene.GetCameraCount() > 0) {
 		
-		//	scene.GetCamera(scene.GetActiveCameraIndex())->projectCamera(viewportWidth, viewportHeight,1000,500);
+
 		for (int i = 0; i < scene.GetCameraCount(); i++) {
 			MeshModel model = scene.GetCamera(i)->GetCameraModel();
-		
-			//SetViewport(viewportWidth, viewportHeight, scene.GetCamera(scene.GetActiveCameraIndex())->getEye().x/2, scene.GetCamera(scene.GetActiveCameraIndex())->getEye().y / 2);
+
 			std::vector<glm::vec3> vertices = model.GetVertices();
 
 
@@ -404,12 +402,17 @@ void Renderer::Render(const Scene& scene)
 	//ScaledAndTransformedNorm(scene);
 	std::vector<glm::vec3> vertices;
 	vertices.push_back( glm::vec3(0, 0, 0));
-	vertices.push_back(glm::vec3(1000, 0, 0));
-	vertices.push_back(glm::vec3(0, 1000, 0));
-	vertices.push_back(glm::vec3(0, 0, 1000));
+	vertices.push_back(glm::vec3(100, 0, 0));
+	vertices.push_back(glm::vec3(0, 100, 0));
+	vertices.push_back(glm::vec3(0, 0, 100));
 	 
+<<<<<<< HEAD
 	//scene.GetCamera(scene.GetActiveCameraIndex())->projectCamera(viewportWidth, viewportHeight,1000,501);
 	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans()*scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() ;
+=======
+
+	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
+>>>>>>> parent of 8ad3f73... greatWork
 	for (int j = 0; j < vertices.size(); j++) {
 		vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 	}

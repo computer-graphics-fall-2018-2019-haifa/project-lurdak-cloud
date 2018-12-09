@@ -8,7 +8,11 @@ Scene::Scene() :
 	activeModelIndex(0)
 {
  
+<<<<<<< HEAD
 	AddCamera(std::make_shared<Camera>(glm::vec4(-20, -20, -500, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
+=======
+	AddCamera(std::make_shared<Camera>(glm::vec4(-600, -350, -100, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
+>>>>>>> parent of 8ad3f73... greatWork
 
 
 }
