@@ -43,7 +43,6 @@ public:
 	void  ScaledAndTransformedModels(const Scene& scene);
 	void ScaledAndTransformedCams(const Scene& scene);
 	void  TransformedCamera(const Scene& scene);
-	void Renderer::ScaledAndTransformedNorm(const Scene& scene);
-	void Renderer::DrawNorma(const glm::vec3 v1, const glm::vec3 v2, const glm::vec3 color);
+	 
 	// Add more methods/functionality as needed...
 };

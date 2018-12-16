@@ -146,7 +146,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
 		if (camLocation != deltaCamLocation  ) {
-			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+			scene.GetCamera(scene.GetActiveCameraIndex()).SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 		}
 		if (ImGui::Button("Close Me"))
 		{
@@ -212,7 +212,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				ImGui::Begin("Camera Matrix", &showViewMatrix);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
 				ImGui::Text("Hello from another window!");
-				glm::mat4 modelMat = scene.GetCamera(0)->GetCamViewTrans();
+				glm::mat4 modelMat = scene.GetCamera(0).GetCamViewTrans();
 				ImGui::Text("0x %.1f", modelMat[0].x); ImGui::SameLine(120);
 				ImGui::Text("0y %.1f", modelMat[0].y); ImGui::SameLine(240);
 				ImGui::Text("0z %.1f", modelMat[0].z); ImGui::SameLine(360);

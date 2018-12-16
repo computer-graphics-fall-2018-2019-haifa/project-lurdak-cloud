@@ -10,7 +10,7 @@ Scene::Scene() :
 	activeModelIndex(0)
 {
  
-	AddCamera(std::make_shared<Camera>(glm::vec4(-600, -350, -100, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
+	AddCamera(  std::make_shared<Camera> (glm::vec4(-600, -350, -100, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
 
 
 }
@@ -25,7 +25,7 @@ void Scene::AddModel(const std::shared_ptr<MeshModel>& model)
 }
  Camera   Scene::GetCamera(int index)const
  {
-	 return      cameras[index];
+	 return      *cameras[index];
  }
 
 const int Scene::GetModelCount() const
