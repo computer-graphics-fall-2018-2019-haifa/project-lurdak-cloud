@@ -206,8 +206,12 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			
 			//model.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
 			glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
 			//glm::mat4 tMat = model.GetWorldTransformation();
+=======
+			glm::mat4 tMat = model.GetWorldTransformation();
+>>>>>>> parent of 8ad3f73... greatWork
 =======
 			glm::mat4 tMat = model.GetWorldTransformation();
 >>>>>>> parent of 8ad3f73... greatWork
@@ -415,6 +419,7 @@ void Renderer::Render(const Scene& scene)
 	std::vector<glm::vec3> vertices;
 	vertices.push_back( glm::vec3(0, 0, 0));
 <<<<<<< HEAD
+<<<<<<< HEAD
 	vertices.push_back(glm::vec3(500,0, 0));
 	vertices.push_back(glm::vec3(0, 500, 0));
 	vertices.push_back(glm::vec3(0, 0, 500));
@@ -428,6 +433,12 @@ void Renderer::Render(const Scene& scene)
 	vertices.push_back(glm::vec3(0, 100, 0));
 	vertices.push_back(glm::vec3(0, 0, 100));
 	 
+=======
+	vertices.push_back(glm::vec3(100, 0, 0));
+	vertices.push_back(glm::vec3(0, 100, 0));
+	vertices.push_back(glm::vec3(0, 0, 100));
+	 
+>>>>>>> parent of 8ad3f73... greatWork
 
 	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
 >>>>>>> parent of 8ad3f73... greatWork

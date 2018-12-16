@@ -863,3 +863,6 @@ build2/x64/Release/ALL_BUILD/ALL_BUILD.tlog/custombuild.command.1.tlog
 build2/x64/Release/ALL_BUILD/ALL_BUILD.tlog/custombuild.read.1.tlog
 build2/x64/Release/ALL_BUILD/ALL_BUILD.tlog/custombuild.write.1.tlog
 build2/x64/Release/ZERO_CHECK/ZERO_CHECK.Build.CppClean.log
+*.cpp
+*.cpp
+Viewer/src/Renderer.cpp

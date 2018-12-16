@@ -149,11 +149,15 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
 		if (camLocation != deltaCamLocation  ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			scene.GetCamera(scene.GetActiveCameraIndex())->setEye(camLocation );
 		}
 		if (ImGui::Button("look at 0,0,0"))
 		{
 			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0,1, 0));
+=======
+			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+>>>>>>> parent of 8ad3f73... greatWork
 =======
 			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 >>>>>>> parent of 8ad3f73... greatWork
