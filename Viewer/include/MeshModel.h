@@ -24,6 +24,7 @@ private:
 	glm::vec4 color;
 	std::string modelName;
 	std::vector<glm::vec3> boxPoints;
+	std::vector<glm::vec3> axes;
 
 	std::vector<glm::vec3> scaledAndRotatedvertices;
 	std::vector<glm::vec3> boxPoints2;
@@ -47,7 +48,7 @@ public:
 	const bool isShowBox();
 	const glm::vec4& GetColor() const;
 	void SetColor(const glm::vec4& color);
-	
+	const std::vector<glm::vec3>  getAxes();
 	const std::string& GetModelName();
 	void SetModelName(const std::string name);
 	const std::vector<glm::vec3>  GetVertices();

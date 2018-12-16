@@ -33,7 +33,7 @@ public:
 
 	void Camera::moveCame(const glm::vec3& transfor);
  
-	 
+	void	Camera::setEye(glm::vec3 location);
 	void SetZoom(const float zoom);
 	MeshModel     GetCameraModel();
 	void projectCamera(int width, int hight, int far, int near);

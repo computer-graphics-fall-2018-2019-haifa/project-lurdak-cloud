@@ -19,8 +19,8 @@ Camera::Camera(const glm::vec4& eye, const glm::vec4& at, const glm::vec4& up) :
 	cameraModel.changeScale(glm::vec3(10, 10, 10));
   
 	SetCameraLookAt(this->eye, glm::vec3(at.x,at.y,at.z), glm::vec3(up.x,up.y,up.z));
-	//isOrth = false;
-	projectCamera(20, 20, 20, 1);
+	isOrth = false;
+	projectCamera(2, 2, 2, 1);
 }
 
 Camera::~Camera()
@@ -34,9 +34,9 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
 	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
 	
-	/*this->eye = eye;
+	this->eye = eye;
 	cameraModel.setWorldLocation(this->eye);
-	 
+/*
 	glm::mat4 orint= {
 	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  , 0),
 	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0),
@@ -55,17 +55,16 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , -eye.z),
 	   glm::vec4(0,0,0,     1)
 	});
-<<<<<<< HEAD
+ 
  */
-	this->cameraModel.SetWorldTransformation(Utils::matrixMulti(glm::vec3(0,0,0), glm::mat4{
-	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  ,0),
-	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , 0 ),
-	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z ,0),
-	   glm::vec4(glm::dot(xaxis, eye),glm::dot(yaxis, eye), glm::dot(zaxis, eye),     1)
+	this->cameraModel.SetWorldTransformation(  glm::mat4{
+	   glm::vec4(xaxis.x  , yaxis.x  , zaxis.x  ,glm::dot(xaxis, -eye)),
+	   glm::vec4(xaxis.y  , yaxis.y , zaxis.y  , glm::dot(yaxis, -eye)),
+	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z ,glm::dot(zaxis, -eye)),
+	   glm::vec4(0,0, 0,     1)
 		});
 
-=======
->>>>>>> parent of 8ad3f73... greatWork
+ 
 	this->viewTransformation = glm::inverse(this->cameraModel.GetWorldTransformation());
 	
 
@@ -120,4 +119,7 @@ void Camera::projectCamera(int width, int hight, int far, int near)
 }
 glm::vec3 Camera::getEye() {
 	return this->eye;
+}
+void Camera::setEye(glm::vec3 location) {
+	 this->eye=location;
 }

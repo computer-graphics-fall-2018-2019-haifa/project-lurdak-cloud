@@ -59,6 +59,7 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 	}
 
 	this->center =    glm::vec3((maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2);
+	
 	this->modelSelfRotate = (glm::vec3(0, 0, 0));
 	changeScale(glm::vec3(10, 10, 10));
 	this->boxPoints.push_back(glm::vec3(maxX , maxY, minZ));
@@ -77,6 +78,10 @@ MeshModel::MeshModel(const std::vector<Face>& faces, const std::vector<glm::vec3
 		center.y = 0;
 		center.z = 0;
 	}
+	this->axes.push_back(glm::vec3(200, 0, 0));
+	this->axes.push_back(glm::vec3(0, 200, 0));
+	this->axes.push_back(glm::vec3(0, 0, 200));
+	
 }
 
 MeshModel::~MeshModel()
@@ -91,7 +96,7 @@ void MeshModel::SetWorldTransformation(const glm::mat4x4& worldTransform)
 }
 void MeshModel::SetWorldTransformation(const glm::vec3 location,const glm::vec3 rotate)
 {
-	this->worldTransform = Utils::RotateMatrix(rotate)*Utils::TranslateMatrix(location);
+ this->worldTransform = Utils::TranslateMatrix(location)*Utils::RotateMatrix(rotate);
 }
 void MeshModel::applyScaleAndRotate() {
 	this->scaledAndRotatedvertices = this->vertices;
@@ -109,6 +114,15 @@ void MeshModel::applyScaleAndRotate() {
 		this->boxPoints2[j] = Utils::matrixMulti(this->boxPoints2[j], this->selfTransform);
 	 
 	}
+	for (int j = 0; j < this->axes.size(); j++) {
+		this->axes[j] = Utils::matrixMulti(this->axes[j], this->selfTransform);
+
+	}
+	 
+		this->center = Utils::matrixMulti(this->center, this->selfTransform);
+
+	 
+	
 
 }
 
@@ -220,3 +234,6 @@ const bool MeshModel::isShowBox() {
 const glm::vec3 MeshModel::getCenter() {
 	return  this->center;
 } 
+const std::vector<glm::vec3> MeshModel::getAxes() {
+	return  this->axes;
+}

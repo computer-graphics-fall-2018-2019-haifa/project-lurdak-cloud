@@ -200,11 +200,13 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			MeshModel model = *scene.GetModel(i);
 			
 			std::vector<glm::vec3> vertices = model.GetVertices( );
+			std::vector<glm::vec3> axes = model.getAxes();
 	 
 	
 			
 			//model.lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-			glm::mat4 tMat = model.GetWorldTransformation();
+			glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
+			//glm::mat4 tMat = model.GetWorldTransformation();
 		
 			tMat = cam.GetCamProjTrans()*cam.GetCamViewTrans()*tMat;
 			for(int j=0;j<vertices.size();j++){
@@ -212,6 +214,12 @@ void Renderer::ScaledAndTransformedModels(const Scene& scene) {
 			 
 			 
 			}
+			for (int j = 0; j < axes.size(); j++) {
+				axes[j] = Utils::matrixMulti(axes[j], tMat);
+				DrawBrenLineAlg(axes[j].x, axes[j].y, model.getCenter().x, model.getCenter().y, glm::vec3(1, 1,0));
+			 
+			}
+			
 			std::vector<glm::vec3> box = model.getBox();
 			
 
@@ -398,21 +406,18 @@ void Renderer::Render(const Scene& scene)
 
 	}*/
 	ScaledAndTransformedModels(scene);
-	ScaledAndTransformedCams(scene);
+	//ScaledAndTransformedCams(scene);
 	//ScaledAndTransformedNorm(scene);
 	std::vector<glm::vec3> vertices;
 	vertices.push_back( glm::vec3(0, 0, 0));
-	vertices.push_back(glm::vec3(100, 0, 0));
-	vertices.push_back(glm::vec3(0, 100, 0));
-	vertices.push_back(glm::vec3(0, 0, 100));
+	vertices.push_back(glm::vec3(500,0, 0));
+	vertices.push_back(glm::vec3(0, 500, 0));
+	vertices.push_back(glm::vec3(0, 0, 500));
+	Camera cam =*scene.GetCamera(scene.GetActiveCameraIndex());
 	 
-<<<<<<< HEAD
-	//scene.GetCamera(scene.GetActiveCameraIndex())->projectCamera(viewportWidth, viewportHeight,1000,501);
-	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans()*scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() ;
-=======
-
-	glm::mat4 tMat = scene.GetCamera(scene.GetActiveCameraIndex())->GetCamProjTrans() *scene.GetCamera(scene.GetActiveCameraIndex())->GetCamViewTrans();
->>>>>>> parent of 8ad3f73... greatWork
+ 
+	glm::mat4 tMat = cam.GetCamViewTrans();// cam.GetCamProjTrans();
+	
 	for (int j = 0; j < vertices.size(); j++) {
 		vertices[j] = Utils::matrixMulti(vertices[j], tMat);
 	}

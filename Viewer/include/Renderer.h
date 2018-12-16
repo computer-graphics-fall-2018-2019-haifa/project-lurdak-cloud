@@ -32,7 +32,7 @@ private:
 public:
 	Renderer(int viewportWidth, int viewportHeight, int viewportX = 0, int viewportY = 0);
 	~Renderer();
-
+	void DrawLine(const glm::vec3 a, const glm::vec3 b, const glm::vec4& color, const float zoom);
 	void Render(const Scene& scene);
 	void SwapBuffers();
 	void ClearColorBuffer(const glm::vec3& color);

@@ -23,7 +23,7 @@ glm::vec3 location= glm::vec3(0);
 glm::vec3 rotate=glm::vec3(0);
 glm::vec3 camLocation = glm::vec3(0,0,-10);
 glm::vec3 camRotate = glm::vec3(0);
-
+int firstTime = 0;
 glm::vec3 worldRotate = glm::vec3(0);
 glm::vec3 deltaScale= glm::vec3(10);
 glm::vec3 deltaLocation= glm::vec3(0);
@@ -133,7 +133,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::Text("Hello from another window!");
 		 
 		ImGui::PushItemWidth(50);
-		 
+		if (firstTime == 0) {
+			camLocation = scene.GetCamera(scene.GetActiveCameraIndex())->getEye(); 
+			firstTime++;
+		}
 		deltaCamLocation = camLocation;
 		ImGui::InputFloat("Camera X", &camLocation.x, 0, 0, 2); ImGui::SameLine(140);
 		ImGui::InputFloat("Camera y", &camLocation.y, 0, 0, 2); ImGui::SameLine(280);
@@ -145,8 +148,13 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 		ImGui::InputFloat("zoom", &worldRotate.x, 0, 0, 2); ImGui::SameLine(220);
 		if (camLocation != deltaCamLocation  ) {
-			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+			scene.GetCamera(scene.GetActiveCameraIndex())->setEye(camLocation );
 		}
+		if (ImGui::Button("look at 0,0,0"))
+		{
+			scene.GetCamera(scene.GetActiveCameraIndex())->SetCameraLookAt(camLocation, glm::vec3(0, 0, 0), glm::vec3(0,1, 0));
+		}
+
 		if (ImGui::Button("Close Me"))
 		{
 			showCameraControl = false;
