@@ -14,7 +14,6 @@
 class Camera
 {
 private:
-	MeshModel cameraModel;
 	glm::mat4x4 viewTransformation;
 	glm::mat4x4 projectionTransformation;
 	float zoom;
