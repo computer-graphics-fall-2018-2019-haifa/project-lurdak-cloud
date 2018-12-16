@@ -34,7 +34,7 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	glm::vec3 xaxis = glm::normalize(cross(up, zaxis));
 	glm::vec3 yaxis = glm::normalize(cross(zaxis, xaxis));
 	
-	this->eye = eye;
+	/*this->eye = eye;
 	cameraModel.setWorldLocation(this->eye);
 /*
 	glm::mat4 orint= {
@@ -55,6 +55,7 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	   glm::vec4(xaxis.z  , yaxis.z  , zaxis.z , -eye.z),
 	   glm::vec4(0,0,0,     1)
 	});
+<<<<<<< HEAD
  
  */
 	this->cameraModel.SetWorldTransformation(  glm::mat4{
@@ -65,6 +66,8 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 		});
 
  
+=======
+>>>>>>> parent of 8ad3f73... greatWork
 	this->viewTransformation = glm::inverse(this->cameraModel.GetWorldTransformation());
 	
 
