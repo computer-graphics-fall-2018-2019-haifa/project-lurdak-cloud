@@ -150,17 +150,30 @@ void Renderer::Render(const Scene& scene)
 	//#############################################
 
 	// Draw a chess board in the middle of the screen
-	if (scene.GetModelCount() > 0) {
-		auto a = scene.GetModel(0);
-		
-	
-	}
-	
+	DrawBrenLineAlg(100,100, viewportWidth - 100, viewportWidth - 100, glm::vec3(0, 0,1));
+	DrawBrenLineAlg( 50, 50,100,100, glm::vec3(1, 0, 0));
+	DrawBrenLineAlg(100, 100, 500, 100, glm::vec3(0, 1, 0));
 	for (int i = 0; i < 10; i++) {
-		DrawBrenLineAlg(100 + i * 50, 100, 100 + i * 50, 600, glm::vec3(0, 1, 0));
-		DrawBrenLineAlg(100 , 100+50*i, 600, 100 + 50 * i, glm::vec3(0, 1, 0));
+		DrawBrenLineAlg(100+i,)
 	}
-	
+	/*for (int i = 100; i < viewportWidth - 100; i++)
+	{
+		for (int j = 100; j < viewportHeight - 100; j++)
+		{
+			int mod_i = i / 50;
+			int mod_j = j / 50;
+
+			int odd = (mod_i + mod_j) % 2;
+			if (odd)
+			{
+				putPixel(i, j, glm::vec3(0, 1, 0));
+			}
+			else
+			{
+				putPixel(i, j, glm::vec3(1, 0, 0));
+			}
+		}
+	}*/
 }
 
 //##############################
