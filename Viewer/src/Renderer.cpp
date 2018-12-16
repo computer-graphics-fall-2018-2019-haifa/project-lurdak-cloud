@@ -15,6 +15,10 @@ Renderer::Renderer(int viewportWidth, int viewportHeight, int viewportX, int vie
 {
 	initOpenGLRendering();
 	SetViewport(viewportWidth, viewportHeight, viewportX, viewportY);
+	this->axes.push_back(glm::vec3(0,0, 0));
+	this->axes.push_back( glm::vec3(viewportWidth - 100,0, 0));
+	this->axes.push_back(glm::vec3(0, viewportWidth - 100, 0));
+	this->axes.push_back(glm::vec3(0,0, viewportWidth - 100));
 }
 
 Renderer::~Renderer()
@@ -142,20 +146,21 @@ void Renderer::DrawBrenLineAlg(int x0,int y0,int x1, int y1, const glm::vec3& co
 
 
 }
+void Renderer::DrawAxesAtworld(const Scene& scene) {
+
+		DrawBrenLineAlg(axes[0].x, axes[0].y, axes[1].x, axes[1].y, glm::vec3(1, 0, 0));
+		DrawBrenLineAlg(axes[0].x, axes[0].y, axes[2].x, axes[2].y, glm::vec3(0, 1, 0));
+		DrawBrenLineAlg(axes[0].x, axes[0].y, axes[3].x, axes[3].y, glm::vec3(0, 0, 1));
+}
 void Renderer::Render(const Scene& scene)
 {
+
 	//#############################################
 	//## You should override this implementation ##
 	//## Here you should render the scene.       ##
 	//#############################################
 
-	// Draw a chess board in the middle of the screen
-	DrawBrenLineAlg(100,100, viewportWidth - 100, viewportWidth - 100, glm::vec3(0, 0,1));
-	DrawBrenLineAlg( 50, 50,100,100, glm::vec3(1, 0, 0));
-	DrawBrenLineAlg(100, 100, 500, 100, glm::vec3(0, 1, 0));
-	for (int i = 0; i < 10; i++) {
-		DrawBrenLineAlg(100+i,)
-	}
+	DrawAxesAtworld(scene);
 	/*for (int i = 100; i < viewportWidth - 100; i++)
 	{
 		for (int j = 100; j < viewportHeight - 100; j++)

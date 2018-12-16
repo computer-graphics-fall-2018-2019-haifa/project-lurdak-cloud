@@ -18,7 +18,7 @@ private:
 	int viewportHeight;
 	int viewportX;
 	int viewportY;
-
+	std::vector <glm::vec3> axes;
 	void putPixel(int x, int y, const glm::vec3& color);
 	void createBuffers(int viewportWidth, int viewportHeight);
 	void plotLineLow(int x0, int y0, int x1, int y1, const glm::vec3& color);
@@ -32,7 +32,7 @@ private:
 public:
 	Renderer(int viewportWidth, int viewportHeight, int viewportX = 0, int viewportY = 0);
 	~Renderer();
-
+	void DrawAxesAtworld(const Scene& scene);
 	void Render(const Scene& scene);
 	void SwapBuffers();
 	void ClearColorBuffer(const glm::vec3& color);
