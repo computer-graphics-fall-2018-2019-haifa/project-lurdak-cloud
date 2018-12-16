@@ -10,11 +10,14 @@ Scene::Scene() :
  
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  
  
 	AddCamera(std::make_shared<Camera>(glm::vec4(-200, 100, -400, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));
  
 =======
+=======
+>>>>>>> parent of 8ad3f73... greatWork
 =======
 >>>>>>> parent of 8ad3f73... greatWork
 	AddCamera(std::make_shared<Camera>(glm::vec4(-600, -350, -100, 0), glm::vec4(0, 0, 0, 0), glm::vec4(0, 1, 0, 0)));

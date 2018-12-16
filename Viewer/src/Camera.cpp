@@ -57,6 +57,7 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 	});
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  
  */
 	this->cameraModel.SetWorldTransformation(  glm::mat4{
@@ -67,6 +68,8 @@ void Camera::SetCameraLookAt(const glm::vec3& eye, const glm::vec3& at, const gl
 		});
 
  
+=======
+>>>>>>> parent of 8ad3f73... greatWork
 =======
 >>>>>>> parent of 8ad3f73... greatWork
 =======
