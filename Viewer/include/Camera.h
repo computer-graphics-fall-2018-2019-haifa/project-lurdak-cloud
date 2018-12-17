@@ -37,6 +37,8 @@ public:
 		const float far);
 
 	void SetZoom(const float zoom);
-
+	glm::mat4  getProjection();
+	glm::mat4  getView();
+ 
 	// Add more methods/functionality as needed...
 };

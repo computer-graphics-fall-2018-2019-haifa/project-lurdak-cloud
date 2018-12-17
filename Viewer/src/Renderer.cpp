@@ -6,9 +6,15 @@
 #include <imgui/imgui.h>
 #include <vector>
 #include <cmath>
-
+#include "Utils.h"
+ 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
-
+ 
+template<class T>
+const T& min(const T& a, const T& b)
+{
+	return (b < a) ? b : a;
+}
 Renderer::Renderer(int viewportWidth, int viewportHeight, int viewportX, int viewportY) :
 	colorBuffer(nullptr),
 	zBuffer(nullptr)
@@ -144,18 +150,44 @@ void Renderer::DrawBrenLineAlg(int x0,int y0,int x1, int y1, const glm::vec3& co
 }
 void Renderer::Render(const Scene& scene)
 {
+	std::vector<glm::vec3> axes;
+	Camera cam= Camera(glm::vec4(0,0,-50,1), glm::vec4(0, 0,0,1), glm::vec4(0, 1, 0,1));
+	if (scene.GetCameraCount() > 0) {
+		cam = scene.GetActiveCamera();
+
+	}
+	
+
+	axes.push_back(glm::vec3(0, 0, 0));
+	axes.push_back(glm::vec3(1, 0, 0));
+	axes.push_back(glm::vec3(0, 1, 0));
+	axes.push_back(glm::vec3(0,0, 1));
+	cam.SetPerspectiveProjection(90, viewportWidth / (float)viewportHeight, 0.1, 100);
+	glm::mat4 view=cam.getView();
+ 
+	view = glm::inverse(view);
+	for (int i = 0; i < axes.size(); i++) {
+		
+		axes[i] = Utils::MatrixMulti(glm::vec4(axes[i], 1), view);
+		axes[i]=Utils::MatrixMulti(glm::vec4(axes[i], 1), cam.getProjection());
+		axes[i].x =   (float)((axes[i].x + 1) * 0.5 * viewportWidth);
+		axes[i].y =   (float)(( (axes[i].y + 1) * 0.5) * viewportHeight);
+
+
+
+	}
+	DrawBrenLineAlg(axes[0].x, axes[0].y, axes[1].x, axes[1].y, glm::vec3(1, 0, 0));
+	DrawBrenLineAlg(axes[0].x, axes[0].y, axes[2].x, axes[2].y, glm::vec3(0, 1, 0));
+	DrawBrenLineAlg(axes[0].x, axes[0].y, axes[3].x, axes[3].y, glm::vec3(0, 0, 1));
+	 
 	//#############################################
 	//## You should override this implementation ##
 	//## Here you should render the scene.       ##
 	//#############################################
 
 	// Draw a chess board in the middle of the screen
-	DrawBrenLineAlg(100,100, viewportWidth - 100, viewportWidth - 100, glm::vec3(0, 0,1));
-	DrawBrenLineAlg( 50, 50,100,100, glm::vec3(1, 0, 0));
-	DrawBrenLineAlg(100, 100, 500, 100, glm::vec3(0, 1, 0));
-	for (int i = 0; i < 10; i++) {
-		DrawBrenLineAlg(100+i,)
-	}
+	 
+	 
 	/*for (int i = 100; i < viewportWidth - 100; i++)
 	{
 		for (int j = 100; j < viewportHeight - 100; j++)
